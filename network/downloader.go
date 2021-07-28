@@ -20,16 +20,15 @@ func BuildRequest(method string, url string) (*http.Request, error) {
 // merge output files concurrently using go channel or something
 func ConcurrentDownloader(meta *FileMeta, thread int) {
 	fmt.Println("Initiating download... dispatching workers")
-	request, _ := BuildRequest(http.MethodGet, meta.FileUrl)
 	chunks := data.CalculateChunks(int(meta.ContentLength), thread)
 	var wg sync.WaitGroup
 	for i, segment := range chunks.Segments {
+		request, _ := BuildRequest(http.MethodGet, meta.FileUrl)
 		// start before concurrency
 		wg.Add(1)
 		// capturing values as they change
 		i := i
 		segment := segment
-		request := request
 		go func() {
 			defer wg.Done() // defer is good pattern than trying to close in a specific place
 			DownloadSegment(request, i, segment)
@@ -44,10 +43,17 @@ func ConcurrentDownloader(meta *FileMeta, thread int) {
 func DownloadSegment(request *http.Request, i int, r data.Range) {
 	fmt.Printf("\nstarting segment : " + fmt.Sprintf("# %v [%v-%v]", i, r.Start, r.End))
 	request.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", r.Start, r.End))
-	resp, _ := http.DefaultClient.Do(request)
+	resp, err := http.DefaultClient.Do(request)
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	// handle error
 	// read this byte by byte so you can show progress
-	data, _ := ioutil.ReadAll(resp.Body)
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
 	ioutil.WriteFile(fmt.Sprintf("out/segment-%v.pdf", i), data, os.ModePerm)
 	fmt.Println("Downloaded segment: ", i)
 }
