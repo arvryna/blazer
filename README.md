@@ -4,6 +4,10 @@
 - File verification with SHA
 - Rich meta data
 
+# usage
+
+blazer -url=example.com/1.pdf -thread=10 -out=file.pdf
+
 # Todo:
 - show time elapsed
 - support for verbose logging

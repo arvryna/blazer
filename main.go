@@ -1,7 +1,24 @@
 package main
 
-import "github.com/arvpyrna/blazer/data"
+import (
+	"fmt"
+	"strconv"
+
+	"github.com/arvpyrna/blazer/data"
+	"github.com/arvpyrna/blazer/network"
+)
+
+func setup() {
+	flags := data.ParseCLIFlags()
+
+	meta := network.GetFileMeta(flags.Url)
+	fmt.Println("Output path" + flags.OutputPath)
+	fmt.Println("Download the file in " + strconv.Itoa(flags.Thread) + " threads")
+	fmt.Println("File size: " + data.GetFormattedSize(meta.ContentLength))
+
+	network.Download(flags.Url, flags.Thread)
+}
 
 func main() {
-	data.ParseCLIFlags()
+	setup()
 }

@@ -3,20 +3,24 @@ package data
 import (
 	"flag"
 	"fmt"
-	"strconv"
-
-	"github.com/arvpyrna/blazer/network"
 )
 
 const DEFAULT_THREAD_COUNT = 3
 const DEFAULT_OUTPUT_PATH = "."
 
+type CLIFlags struct {
+	Url        string
+	Thread     int
+	OutputPath string
+	Verbose    bool
+}
+
 func GetFilenameFromURL() {
 }
 
-func ParseCLIFlags() {
+func ParseCLIFlags() *CLIFlags {
 	url := flag.String("url", "", "a string")
-	outputPath := flag.String("out", DEFAULT_OUTPUT_PATH, "a string")
+	out := flag.String("out", DEFAULT_OUTPUT_PATH, "a string")
 	thread := flag.Int("thread", DEFAULT_THREAD_COUNT, "a number")
 	// if *url == "" { // use regex and do proper analysis
 	// 	fmt.Println("not valid URL")
@@ -24,16 +28,14 @@ func ParseCLIFlags() {
 	// }
 	flag.Parse()
 
-	fmt.Println("Output path" + *outputPath)
-	meta := network.GetFileMeta(*url)
-	// fmt.Println("Content length of the file: " + strconv.Itoa(meta.ContentLength))
-	fmt.Println("Download the file in " + strconv.Itoa(*thread) + " threads")
-	fmt.Println("File size: " + getFormattedSize(meta.ContentLength))
-
-	network.Download(*url, *thread)
+	cliFlags := CLIFlags{}
+	cliFlags.Url = *url
+	cliFlags.OutputPath = *out
+	cliFlags.Thread = *thread
+	return &cliFlags
 }
 
-func getFormattedSize(size float64) string {
+func GetFormattedSize(size float64) string {
 	mem := [6]string{"b", "kb", "mb", "gb", "tb", "pb"}
 	i := 0
 	for {
