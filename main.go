@@ -15,15 +15,29 @@ import (
 // the life of the service can be just 1 hour, there you can learn so many interesting things
 // download files after giving username and password(with authentication)
 // export as package too, later somehow
+// show current download speed and ETA
 
 const DEFAULT_THREAD_COUNT = 3
 const DEFAULT_OUTPUT_PATH = "."
 
 type FileMeta struct {
-	ContentLength int
+	ContentLength float64
 	ServerName    string
 	Age           int
 	ContentType   string
+}
+
+func getFormattedSize(size float64) string {
+	mem := [6]string{"b", "kb", "mb", "gb", "tb", "pb"}
+	i := 0
+	for {
+		if size < 1024 {
+			return fmt.Sprintf("%.2f", size) + " " + mem[i]
+		} else {
+			size = size / 1024
+			i++
+		}
+	}
 }
 
 func preferredChunks(contentLength int) {
@@ -42,7 +56,8 @@ func getFileMeta(url string) *FileMeta {
 		fmt.Println("Error downloading meta details of URL, ABORT")
 	}
 	meta := FileMeta{}
-	meta.ContentLength = int(resp.ContentLength)
+	meta.ContentLength = float64(resp.ContentLength)
+	meta.ContentType = r.Header.Get("Content-Type")
 	return &meta
 }
 
@@ -59,7 +74,10 @@ func setup() {
 	fmt.Println("Output path" + *outputPath)
 
 	meta := getFileMeta(*url)
-	fmt.Println("Content length of the file: " + strconv.Itoa(meta.ContentLength))
+	// fmt.Println("Content length of the file: " + strconv.Itoa(meta.ContentLength))
+	fmt.Println("file meta details: ", meta)
+	fmt.Println("Download the file in" + strconv.Itoa(*thread) + "parts")
+	fmt.Println("File size: " + getFormattedSize(meta.ContentLength))
 }
 
 func main() {
