@@ -20,5 +20,7 @@ func setup() {
 }
 
 func main() {
+	r := data.CalculateChunks(100, 7)
+	fmt.Println(r)
 	setup()
 }

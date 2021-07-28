@@ -6,6 +6,7 @@ import (
 )
 
 type FileMeta struct {
+	FileName      string
 	ContentLength float64
 	ServerName    string
 	Age           int
