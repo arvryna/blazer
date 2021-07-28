@@ -1,6 +1,6 @@
 #! /bin/bash
 
-rm -rf build
-mkdir build
+rm -rf out build
+mkdir out build
 go build -o build/blazer main.go
 

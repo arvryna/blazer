@@ -6,6 +6,7 @@ import (
 )
 
 type FileMeta struct {
+	FileUrl       string
 	FileName      string
 	ContentLength float64
 	ServerName    string
@@ -26,5 +27,6 @@ func GetFileMeta(url string) *FileMeta {
 	meta := FileMeta{}
 	meta.ContentLength = float64(resp.ContentLength)
 	meta.ContentType = r.Header.Get("Content-Type")
+	meta.FileUrl = url
 	return &meta
 }
