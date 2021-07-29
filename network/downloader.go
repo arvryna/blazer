@@ -3,9 +3,11 @@ package network
 import (
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/arvpyrna/blazer/data"
 )
@@ -35,15 +37,30 @@ func ConcurrentDownloader(meta *FileMeta, thread int) {
 		}()
 	}
 	wg.Wait()
+	fmt.Println("Merging files..")
 	mergefiles(chunks)
-	// data, _ := ioutil.ReadAll(resp.Body)
-	// ioutil.WriteFile("out/test.pdf", data, os.ModePerm)
+}
+
+// To avoid TLS handshake
+// https://stackoverflow.com/questions/41719797/tls-handshake-timeout-on-requesting-data-concurrently-from-api
+func HTTPClient() *http.Client {
+	t := &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout:   60 * time.Second,
+			KeepAlive: 30 * time.Second,
+		}).Dial,
+		// We use ABSURDLY large keys, and should probably not.
+		TLSHandshakeTimeout: 600 * time.Second,
+	}
+	c := &http.Client{
+		Transport: t,
+	}
+	return c
 }
 
 func DownloadSegment(request *http.Request, i int, r data.Range) {
-	fmt.Printf("\nstarting segment : " + fmt.Sprintf("# %v [%v-%v]", i, r.Start, r.End))
 	request.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", r.Start, r.End))
-	resp, err := http.DefaultClient.Do(request)
+	resp, err := HTTPClient().Do(request)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -62,14 +79,18 @@ func mergefiles(chunks *data.Chunks) {
 	f, _ := os.OpenFile("out/fin.pdf", os.O_CREATE|os.O_WRONLY|os.O_APPEND, os.ModePerm)
 	defer f.Close()
 	for i := range chunks.Segments {
-		data, err := ioutil.ReadFile(fmt.Sprintf("out/segment-%v.pdf", i))
+		fileName := fmt.Sprintf("out/segment-%v.pdf", i)
+		data, err := ioutil.ReadFile(fileName)
 		if err != nil {
 			fmt.Println(err)
 		}
-		n, err := f.Write(data)
+		_, err = f.Write(data)
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Printf("\nbytes merged: %v of segment: %v", n, i)
+		err = os.Remove(fileName)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
