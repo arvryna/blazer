@@ -10,7 +10,7 @@
 blazer -url=example.com/1.pdf -thread=10 -out=file.pdf
 
 ## Bugs:
-- add a way to reply to version flag
+- this didn't work
 - enable multiple download in the same directory by using a unique ID for each downloads
 - maintain history of downloads, if there is a flag -h = true
 - Get "https://logic.pdmi.ras.ru/~gravin/storage/Concrete_Mathematics_2e.pdf": dial tcp 83.149.197.121:443: i/o timeout
@@ -34,8 +34,6 @@ panic: runtime error: invalid memory address or nil pointer dereference
 - move all constants in a single file, for more clarity
 - write basic tests and add it to pipeline
 - move it to top system level, find out where linux apps store temroary files ?
-
-## Resuming file
 
 ## Calcualating ETA
 - ETA depends on the number of threads, download speed, speed of server

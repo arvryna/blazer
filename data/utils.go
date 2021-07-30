@@ -1,6 +1,7 @@
 package data
 
 import (
+	"crypto/rand"
 	"flag"
 	"fmt"
 	"log"
@@ -14,6 +15,15 @@ type CLIFlags struct {
 	OutputPath string
 	Verbose    bool
 	Checksum   string
+}
+
+//generate random string
+func GenRandomString(len int) string {
+	b := make([]byte, len)
+	if _, err := rand.Read(b); err != nil {
+		panic(err)
+	}
+	return fmt.Sprintf("%X", b)
 }
 
 // Delete file/folder
