@@ -11,6 +11,7 @@ blazer -url=example.com/1.pdf -thread=10 -out=file.pdf
 
 ## Bugs:
 - Handle improper URL
+- pass multiple URLs or json of URLs
 - Handle the case where there is no internet
 - while downloading file if there is interruption and if the downloaded file is incomplete, what will you do,
 you can find out incomplete file download by checking expected bytes to be written and bytes written, and then 
@@ -18,7 +19,15 @@ you can try to retry that attempt
 - Get "https://sample-videos.com/img/Sample-jpg-image-30mb.jpg": read tcp 192.168.43.62:41606->103.145.51.95:443: read: connection reset by peer
 - TCP timeout incase of large file
 - Try to download a large file like 10 or 20 gb and 
-
+- implement retry if a segment is corrupted
+- Get "https://releases.ubuntu.com/20.04.2.0/ubuntu-20.04.2.0-desktop-amd64.iso": EOF
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x40 pc=0x64366a]
+- check and handle http status code
+- even if the program crashes, use exception handling and restart the download with same thread count  
+- move all constants in a single file, for more clarity
+- write basic tests and add it to pipeline
+- move it to top system level, find out where linux apps store temroary files ?
 
 ## Resuming file
 
@@ -30,7 +39,9 @@ you can try to retry that attempt
 estimate performance and also node js
 
 # Todo:
+- use interactive terminal support to print messages
 - show time elapsed
+- find optimal concrrency to realize parallel downloads
 - support for verbose logging
 - print the performance graph as well to see perfromance difference, using different number of threads and 
 - storing data in current drive
