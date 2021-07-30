@@ -33,7 +33,7 @@ func setup() {
 func main() {
 	println("session ID: " + data.SESSION_ID)
 
-	data.CreateDir(data.TEMP_DIRECTORY, ".")
+	data.CreateDir(data.TempDirectory(), ".")
 	setup()
-	data.DeleteFile(data.TEMP_DIRECTORY)
+	data.DeleteFile(data.TempDirectory())
 }
