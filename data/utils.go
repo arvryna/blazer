@@ -3,6 +3,9 @@ package data
 import (
 	"flag"
 	"fmt"
+	"log"
+	"os"
+	"path/filepath"
 )
 
 type CLIFlags struct {
@@ -13,13 +16,26 @@ type CLIFlags struct {
 	Checksum   string
 }
 
-func GetFilenameFromURL() {
+// Delete file/folder
+func DeleteFile(name string) {
+	err := os.Remove(name)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func CreateDir(folderName string, dirPath string) {
+	newpath := filepath.Join(".", folderName)
+	err := os.MkdirAll(newpath, os.ModePerm)
+	if err != nil {
+		fmt.Println("Error creating director")
+	}
 }
 
 func ParseCLIFlags() *CLIFlags {
-	url := flag.String("url", "", "a string")
-	out := flag.String("out", DEFAULT_OUTPUT_PATH, "a string")
-	thread := flag.Int("thread", DEFAULT_THREAD_COUNT, "a number")
+	url := flag.String("url", "", "Valid URL to download")
+	out := flag.String("out", DEFAULT_OUTPUT_PATH, "output path to store the downloaded file")
+	t := flag.Int("t", DEFAULT_THREAD_COUNT, "Thread count - Number of concurrent downloads")
 	checksum := flag.String("checksum", "", "checksum SHA to verify file")
 	// if *url == "" { // use regex and do proper analysis
 	// 	fmt.Println("not valid URL")
@@ -27,11 +43,12 @@ func ParseCLIFlags() *CLIFlags {
 	// }
 	flag.Parse()
 
-	cliFlags := CLIFlags{}
-	cliFlags.Url = *url
-	cliFlags.OutputPath = *out
-	cliFlags.Thread = *thread
-	cliFlags.Checksum = *checksum
+	cliFlags := CLIFlags{
+		Url:        *url,
+		OutputPath: *out,
+		Thread:     *t,
+		Checksum:   *checksum,
+	}
 	return &cliFlags
 }
 

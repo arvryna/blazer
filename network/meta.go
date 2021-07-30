@@ -3,6 +3,7 @@ package network
 import (
 	"fmt"
 	"net/http"
+	"path"
 )
 
 type FileMeta struct {
@@ -18,15 +19,19 @@ type FileMeta struct {
 func GetFileMeta(url string) *FileMeta {
 	r, err := BuildRequest(http.MethodHead, url)
 	if err != nil {
-		fmt.Println("Error downloading meta details of URL, ABORT")
+		fmt.Printf("Error building URL %v", err)
 	}
-	resp, err := http.DefaultClient.Do(r)
+
+	resp, err := HTTPClient().Do(r)
 	if err != nil {
-		fmt.Println("Error downloading meta details of URL, ABORT")
+		fmt.Printf("Error fetching meta details of URL %v", err)
 	}
-	meta := FileMeta{}
-	meta.ContentLength = float64(resp.ContentLength)
-	meta.ContentType = r.Header.Get("Content-Type")
-	meta.FileUrl = url
+
+	meta := FileMeta{
+		FileUrl:       url,
+		ContentLength: float64(resp.ContentLength),
+		ContentType:   r.Header.Get("Content-Type"),
+		FileName:      path.Base(r.URL.Path),
+	}
 	return &meta
 }

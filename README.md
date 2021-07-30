@@ -10,7 +10,13 @@
 blazer -url=example.com/1.pdf -thread=10 -out=file.pdf
 
 ## Bugs:
+- add a way to reply to version flag
+- enable multiple download in the same directory by using a unique ID for each downloads
+- maintain history of downloads, if there is a flag -h = true
+- Get "https://logic.pdmi.ras.ru/~gravin/storage/Concrete_Mathematics_2e.pdf": dial tcp 83.149.197.121:443: i/o timeout
+- you should be able to run this from anywhere..
 - Handle improper URL
+- Get "https://mirror.yandex.ru/fedora/linux/releases/34/Workstation/aarch64/iso/Fedora-Workstation-Live-aarch64-34-1.2.iso": read tcp 192.168.0.113:38734->213.180.204.183:443: read: connection reset by peer
 - pass multiple URLs or json of URLs
 - Handle the case where there is no internet
 - while downloading file if there is interruption and if the downloaded file is incomplete, what will you do,

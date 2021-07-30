@@ -6,41 +6,27 @@ type Range struct {
 }
 
 type Chunks struct {
-	ChunkSize int
-	TotalSize int
-	Segments  []Range
-	Parts     int
+	Size      int     // size of a single chunk
+	TotalSize int     // size of the overall file
+	Segments  []Range // segments [[0,n1],[n1+1,n1+chunkSize]....[,n]]
+	Count     int     // number of chunks
 }
 
 func CalculateChunks(totalSize int, parts int) *Chunks {
-	chunks := Chunks{}
-	val := float64(totalSize) / float64(parts)
-	// There is a bug here that last segment will get the largest chunk , that needs to be fixed
-
-	// Trade of, to force flooring or force math.Round, less thread or more thread ????
-	// if val > math.Round(val) {
-	// 	val = math.Round(val) + 1
-	// }
-	// update the return type values properly other wise you will fill wrong values
-	// refractor this code
-	// Handle if the requested thread size is just 1
-	// later compare this code with other sources, also learn more about it
-
-	chunkSize := int(val)
+	chunks := Chunks{Count: parts}
 	chunks.TotalSize = totalSize
-	chunks.Parts = parts
-	chunks.ChunkSize = chunkSize
+	chunks.Size = int(float64(totalSize) / float64(parts))
 	pos := -1
 	for i := 0; i < parts; i++ {
 		r := Range{}
 		r.Start = pos + 1
-		pos += chunkSize
+		pos += chunks.Size
 
 		// Case 1
 		if pos > totalSize {
 			// we have already divided enough segments, so can exit early
 			r.End = totalSize
-			chunks.Parts = i + 1
+			chunks.Count = i + 1
 			chunks.Segments = append(chunks.Segments, r)
 			break
 		}

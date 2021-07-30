@@ -16,7 +16,10 @@ func ConcurrentDownloader(meta *FileMeta, thread int) {
 	chunks := data.CalculateChunks(int(meta.ContentLength), thread)
 	var wg sync.WaitGroup
 	for i, segment := range chunks.Segments {
-		request, _ := BuildRequest(http.MethodGet, meta.FileUrl)
+		request, err := BuildRequest(http.MethodGet, meta.FileUrl)
+		if err != nil {
+			fmt.Println(err)
+		}
 		// start before concurrency
 		wg.Add(1)
 		// capturing values as they change
@@ -28,8 +31,7 @@ func ConcurrentDownloader(meta *FileMeta, thread int) {
 		}()
 	}
 	wg.Wait()
-	fmt.Println("Merging files..")
-	data.MergeFiles(chunks)
+	data.MergeFiles(chunks, meta.FileName)
 }
 
 func DownloadSegment(request *http.Request, i int, r data.Range) {
@@ -42,11 +44,11 @@ func DownloadSegment(request *http.Request, i int, r data.Range) {
 	// handle error
 	// read this byte by byte so you can show progress
 	//TODO: Check if resp is nil, also check error codes
-	data, err := ioutil.ReadAll(resp.Body)
+	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
 	}
-	ioutil.WriteFile(fmt.Sprintf("out/s-%v.pdf", i), data, os.ModePerm)
+	ioutil.WriteFile(data.SegmentFilePath(i), bytes, os.ModePerm)
 	// check if bytes written is same as content size
 	fmt.Println("Downloaded segment: ", i)
 }
