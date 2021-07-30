@@ -11,3 +11,8 @@ package:
 	sudo cp build/blazer /usr/local/bin/
 	echo "binary is now globally available"
 
+release:
+	echo "Create tag with current commit"
+	echo "build latest file and upload to release"
+	echo "write release notes"
+	echo "update changelog"

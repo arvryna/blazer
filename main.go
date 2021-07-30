@@ -13,6 +13,11 @@ func setup() {
 	// delete that folder after download is successful
 	flags := data.ParseCLIFlags()
 
+	if flags.Version {
+		fmt.Printf("Blazer version: [%v]\n", data.VERSION)
+		return
+	}
+
 	fmt.Println("Fetching file meta..")
 	meta := network.GetFileMeta(flags.Url)
 
@@ -26,6 +31,8 @@ func setup() {
 }
 
 func main() {
+	println("session ID: " + data.SESSION_ID)
+
 	data.CreateDir(data.TEMP_DIRECTORY, ".")
 	setup()
 	data.DeleteFile(data.TEMP_DIRECTORY)

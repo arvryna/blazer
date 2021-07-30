@@ -17,5 +17,5 @@ func MemoryFormatStrings() []string {
 }
 
 func SegmentFilePath(id int) string {
-	return fmt.Sprintf("%v/s-%v", TEMP_DIRECTORY, id)
+	return fmt.Sprintf("%v/s-%v-%v", TEMP_DIRECTORY, id, SESSION_ID)
 }

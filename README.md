@@ -1,4 +1,4 @@
-# blazer - CLI tool for uploading/downloading files
+# blazer - CLI tool for downloading files
 
 - Control thread count
 - File verification with SHA
