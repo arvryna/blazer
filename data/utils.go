@@ -34,7 +34,7 @@ func GenRandomString(len int) string {
 func ParseCLIFlags() *CLIFlags {
 	ver := flag.Bool("v", false, "prints current version of blazer")
 	url := flag.String("url", "", "Valid URL to download")
-	out := flag.String("out", DEFAULT_OUTPUT_PATH, "output path to store the downloaded file")
+	out := flag.String("out", "", "output path to store the downloaded file")
 	t := flag.Int("t", DEFAULT_THREAD_COUNT, "Thread count - Number of concurrent downloads")
 	checksum := flag.String("checksum", "", "checksum SHA to verify file")
 	// if *url == "" { // use regex and do proper analysis
