@@ -16,7 +16,7 @@ func MergeFiles(chunks *Chunks, outputName string) {
 
 	bytesMerged := 0
 	for i := range chunks.Segments {
-		fileName := SegmentFilePath(i)
+		fileName := SegmentFilePath(SESSION_ID, i)
 		data, err := ioutil.ReadFile(fileName)
 		if err != nil {
 			fmt.Println(err)

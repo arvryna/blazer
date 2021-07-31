@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"flag"
 	"fmt"
+	"hash/fnv"
 	"log"
 	"os"
 	"path/filepath"
@@ -16,6 +17,12 @@ type CLIFlags struct {
 	Verbose    bool
 	Checksum   string
 	Version    bool
+}
+
+func GenHash(s string) string {
+	hash := fnv.New32a() // why not New64 ?
+	hash.Write([]byte(s))
+	return fmt.Sprintf("%v", hash.Sum32())
 }
 
 //generate random string

@@ -41,14 +41,13 @@ func DownloadSegment(request *http.Request, i int, r data.Range) {
 		fmt.Println(err)
 	}
 
-	// handle error
 	// read this byte by byte so you can show progress
 	//TODO: Check if resp is nil, also check error codes
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
 	}
-	ioutil.WriteFile(data.SegmentFilePath(i), bytes, os.ModePerm)
+	ioutil.WriteFile(data.SegmentFilePath(data.SESSION_ID, i), bytes, os.ModePerm)
 	// check if bytes written is same as content size
 	fmt.Println("Downloaded segment: ", i)
 }
