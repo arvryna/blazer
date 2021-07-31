@@ -16,7 +16,7 @@ func setup(flags *data.CLIFlags) {
 	logInfo(flags, meta)
 
 	// Generate session ID for current download
-	data.SESSION_ID = data.GenHash(flags.Url)
+	data.SESSION_ID = data.GenHash(flags.Url, flags.Thread)
 
 	// Using a temp folder in current dir to manage use artifacts of download
 	data.CreateDir(data.TempDirectory(data.SESSION_ID), ".")

@@ -16,10 +16,10 @@ type CLIFlags struct {
 	Version    bool
 }
 
-func GenHash(s string) string {
+func GenHash(s string, threadCount int) string {
 	hash := fnv.New32a() // why not New64 ?
 	hash.Write([]byte(s))
-	return fmt.Sprintf("%v", hash.Sum32())
+	return fmt.Sprintf("%v-%v", hash.Sum32(), threadCount)
 }
 
 //generate random string
