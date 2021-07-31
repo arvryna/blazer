@@ -7,7 +7,6 @@ var SESSION_ID string = ""
 // Constants
 const VERSION = "0.1-alpha"
 const DEFAULT_THREAD_COUNT = 10
-const DEFAULT_OUTPUT_PATH = "."
 const MEM_UNIT = 1024
 
 // Functions

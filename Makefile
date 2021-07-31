@@ -12,7 +12,7 @@ package:
 	echo "binary is now globally available"
 
 release:
+	echo "checkout to main"
+	echo "update changelog"
 	echo "Create tag with current commit"
 	echo "build latest file and upload to release"
-	echo "write release notes"
-	echo "update changelog"

@@ -25,7 +25,7 @@ func CreateDir(folderName string, dirPath string) {
 	newpath := filepath.Join(".", folderName)
 	err := os.MkdirAll(newpath, os.ModePerm)
 	if err != nil {
-		fmt.Println("Error creating director")
+		fmt.Println("Error creating directory")
 	}
 }
 

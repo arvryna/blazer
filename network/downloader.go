@@ -12,13 +12,13 @@ import (
 
 // merge output files concurrently using go channel or something
 func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
-	fmt.Println("Initiating download... dispatching workers")
+	fmt.Printf("Download the file in %v threads\n", thread)
 	chunks := data.CalculateChunks(int(meta.ContentLength), thread)
 	var wg sync.WaitGroup
 	for i, segment := range chunks.Segments {
 		// if segment exist skip current segment download
 		if data.FileExists(data.SegmentFilePath(data.SESSION_ID, i)) {
-			fmt.Printf("\nsegment Id: %v already downloaded", i)
+			// fmt.Printf("\nsegment Id: %v already downloaded", i)
 			continue
 		}
 		request, err := BuildRequest(http.MethodGet, meta.FileUrl)
