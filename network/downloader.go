@@ -11,7 +11,7 @@ import (
 )
 
 // merge output files concurrently using go channel or something
-func ConcurrentDownloader(meta *FileMeta, thread int) {
+func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 	fmt.Println("Initiating download... dispatching workers")
 	chunks := data.CalculateChunks(int(meta.ContentLength), thread)
 	var wg sync.WaitGroup
@@ -25,9 +25,7 @@ func ConcurrentDownloader(meta *FileMeta, thread int) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		// start before concurrency
 		wg.Add(1)
-		// capturing values as they change
 		i := i
 		segment := segment
 		go func() {
@@ -36,7 +34,7 @@ func ConcurrentDownloader(meta *FileMeta, thread int) {
 		}()
 	}
 	wg.Wait()
-	data.MergeFiles(chunks, meta.FileName)
+	data.MergeFiles(chunks, outputName)
 }
 
 func DownloadSegment(request *http.Request, i int, r data.Range) {
@@ -47,7 +45,7 @@ func DownloadSegment(request *http.Request, i int, r data.Range) {
 	}
 
 	// read this byte by byte so you can show progress
-	//TODO: Check if resp is nil, also check error codes
+	// TODO: Check if resp is nil, also check error codes
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)

@@ -32,7 +32,13 @@ func logInfo(flags *data.CLIFlags, meta *network.FileMeta) {
 
 func initiateDownload(flags *data.CLIFlags, meta *network.FileMeta) {
 	start := time.Now()
-	network.ConcurrentDownloader(meta, flags.Thread)
+
+	path := flags.OutputPath
+	if path == "" {
+		path = meta.FileName
+	}
+
+	network.ConcurrentDownloader(meta, flags.Thread, path)
 	elapsed := time.Since(start)
 	fmt.Printf("Download finished in: %v", elapsed)
 }

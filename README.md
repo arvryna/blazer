@@ -1,5 +1,4 @@
 # blazer - CLI tool for downloading files
-
 - Control thread count
 - File verification with SHA
 - Rich meta data
@@ -7,7 +6,7 @@
 - Resume from interruption
 
 ## usage
-blazer -url=example.com/1.pdf -thread=10 -out=file.pdf
+``` blazer -url=example.com/1.pdf -t=10 -out=file.pdf ```
 
 ## Flags 
 ```
@@ -26,27 +25,23 @@ Usage of blazer:
 
 # Todo:
 - If already temp directory exist, you need to print a message called resuming download...
-// check if bytes written is same as content size
-// Verify if segment is fully downloaded by comparing the content size with bytes written
 - use interactive terminal support to print messages
 - show time elapsed
-- find optimal concrrency to realize parallel downloads
-- support for verbose logging
 - print the performance graph as well to see perfromance difference, using different number of threads and 
 - storing data in current drive
 - show progress
 - also need support for google-drive, dropbox, a simple youtube version too.
 - use interactive terminal to show progress across each thread, so it more cooler
 - upload it to free file sharing service upto some MB, you can build one for yourself and share
-// it with others, write in go, or node js and also use it here, a simple service
-// the life of the service can be just 1 hour, there you can learn so many interesting things
+  it with others, write in go, or node js and also use it here, a simple service
+  the life of the service can be just 1 hour, there you can learn so many interesting things
 - download files after giving username and password(with authentication)
 - export as package too, later somehow
 - show current download speed and ETA
 large file sizes
+- ETA depends on the number of threads, download speed, speed of server
+
 ## Bugs:
-- this didn't work
-- enable multiple download in the same directory by using a unique ID for each downloads
 - maintain history of downloads, if there is a flag -h = true
 - Get "https://logic.pdmi.ras.ru/~gravin/storage/Concrete_Mathematics_2e.pdf": dial tcp 83.149.197.121:443: i/o timeout
 - you should be able to run this from anywhere..
@@ -70,13 +65,9 @@ panic: runtime error: invalid memory address or nil pointer dereference
 - write basic tests and add it to pipeline
 - move it to top system level, find out where linux apps store temroary files ?
 
-## Calcualating ETA
-- ETA depends on the number of threads, download speed, speed of server
-
 ## Experiments and benchmarks
 - Create a ruby server and try to serve a 10 gb file and try to do the same in go and other servers and
 estimate performance and also node js
-
 
 # Roadmap:
 - Write a compatable, high speed server to compliment this client
