@@ -10,6 +10,7 @@
 blazer -url=example.com/1.pdf -thread=10 -out=file.pdf
 
 ## Flags 
+```
 blazer -h
 Usage of blazer:
   -checksum string
@@ -21,6 +22,7 @@ Usage of blazer:
   -url string
     	Valid URL to download
   -v	prints current version of blazer
+```
 
 # Todo:
 - If already temp directory exist, you need to print a message called resuming download...
