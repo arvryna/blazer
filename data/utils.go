@@ -5,9 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"hash/fnv"
-	"log"
-	"os"
-	"path/filepath"
 )
 
 type CLIFlags struct {
@@ -32,22 +29,6 @@ func GenRandomString(len int) string {
 		panic(err)
 	}
 	return fmt.Sprintf("%X", b)
-}
-
-// Delete file/folder
-func DeleteFile(name string) {
-	err := os.RemoveAll(name)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func CreateDir(folderName string, dirPath string) {
-	newpath := filepath.Join(".", folderName)
-	err := os.MkdirAll(newpath, os.ModePerm)
-	if err != nil {
-		fmt.Println("Error creating director")
-	}
 }
 
 func ParseCLIFlags() *CLIFlags {

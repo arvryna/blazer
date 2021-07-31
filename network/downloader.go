@@ -16,6 +16,11 @@ func ConcurrentDownloader(meta *FileMeta, thread int) {
 	chunks := data.CalculateChunks(int(meta.ContentLength), thread)
 	var wg sync.WaitGroup
 	for i, segment := range chunks.Segments {
+		// if segment exist skip current segment download
+		if data.FileExists(data.SegmentFilePath(data.SESSION_ID, i)) {
+			fmt.Printf("\nsegment Id: %v already downloaded", i)
+			continue
+		}
 		request, err := BuildRequest(http.MethodGet, meta.FileUrl)
 		if err != nil {
 			fmt.Println(err)
@@ -48,6 +53,5 @@ func DownloadSegment(request *http.Request, i int, r data.Range) {
 		fmt.Println(err)
 	}
 	ioutil.WriteFile(data.SegmentFilePath(data.SESSION_ID, i), bytes, os.ModePerm)
-	// check if bytes written is same as content size
 	fmt.Println("Downloaded segment: ", i)
 }
