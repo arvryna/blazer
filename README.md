@@ -1,4 +1,4 @@
-# Blazer - Tool concurrent file downloads
+# Blazer CLI - concurrent file downloader
 
 - Control thread count
 - Resume from interruption
