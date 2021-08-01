@@ -61,5 +61,5 @@ func MergeFiles(chunks *Chunks, outputName string) {
 	} else {
 		fmt.Println("File download is incomplete, retry")
 	}
-	// finally check if the SHA matches and also check if the content length matches with
+	// check if the SHA matches and also check if the content length matches with
 }

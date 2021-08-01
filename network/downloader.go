@@ -10,7 +10,6 @@ import (
 	"github.com/arvpyrna/blazer/data"
 )
 
-// merge output files concurrently using go channel or something
 func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 	fmt.Printf("Download the file in %v threads\n", thread)
 	chunks := data.CalculateChunks(int(meta.ContentLength), thread)
@@ -45,7 +44,6 @@ func DownloadSegment(request *http.Request, i int, r data.Range) {
 	}
 
 	// read this byte by byte so you can show progress
-	// TODO: Check if resp is nil, also check error codes
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)

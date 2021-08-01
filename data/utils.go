@@ -1,7 +1,6 @@
 package data
 
 import (
-	"crypto/rand"
 	"flag"
 	"fmt"
 	"hash/fnv"
@@ -20,15 +19,6 @@ func GenHash(s string, threadCount int) string {
 	hash := fnv.New32a() // why not New64 ?
 	hash.Write([]byte(s))
 	return fmt.Sprintf("%v-%v", hash.Sum32(), threadCount)
-}
-
-//generate random string
-func GenRandomString(len int) string {
-	b := make([]byte, len)
-	if _, err := rand.Read(b); err != nil {
-		panic(err)
-	}
-	return fmt.Sprintf("%X", b)
 }
 
 func ParseCLIFlags() *CLIFlags {

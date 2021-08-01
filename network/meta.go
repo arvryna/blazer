@@ -15,7 +15,6 @@ type FileMeta struct {
 	ContentType   string
 }
 
-// check for null response and in such cases you can use, default thread to download
 func GetFileMeta(url string) *FileMeta {
 	r, err := BuildRequest(http.MethodHead, url)
 	if err != nil {
