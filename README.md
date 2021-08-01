@@ -11,14 +11,15 @@
 blazer -h
 Usage of blazer:
   -checksum string
-    	checksum SHA to verify file
+    	checksum SHA256(currently supported) to verify file
   -out string
-    	output path to store the downloaded file (default ".")
+    	output path to store the downloaded file
   -t int
     	Thread count - Number of concurrent downloads (default 10)
   -url string
     	Valid URL to download
   -v	prints current version of blazer
+
 ```
 
 ## Install

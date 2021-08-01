@@ -24,7 +24,7 @@ func FileIntegrityCheck(hashFunc string, path string, expected string) bool {
 	if strings.ToLower(hashFunc) == "sha256" {
 		return (expected == GenChecksumSha256(path))
 	} else {
-		fmt.Printf("%v: not implemented yet", hashFunc)
+		fmt.Println(hashFunc, ": not implemented yet")
 		return false
 	}
 }
@@ -54,7 +54,7 @@ func ParseCLIFlags() *CLIFlags {
 	url := flag.String("url", "", "Valid URL to download")
 	out := flag.String("out", "", "output path to store the downloaded file")
 	t := flag.Int("t", DEFAULT_THREAD_COUNT, "Thread count - Number of concurrent downloads")
-	checksum := flag.String("checksum", "", "checksum SHA to verify file")
+	checksum := flag.String("checksum", "", "checksum SHA256(currently supported) to verify file")
 	// if *url == "" { // use regex and do proper analysis
 	// 	fmt.Println("not valid URL")
 	// 	return

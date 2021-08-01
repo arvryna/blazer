@@ -31,7 +31,7 @@ func setup(flags *data.CLIFlags) {
 	// Check file integrity
 	if flags.Checksum != "" {
 		res := data.FileIntegrityCheck("sha256", meta.FileName, flags.Checksum)
-		fmt.Printf("\nFile integrity: %v\n", res)
+		fmt.Println("File integrity: ", res)
 	}
 	data.DeleteFile(data.TempDirectory(data.SESSION_ID))
 }
@@ -47,13 +47,13 @@ func initiateDownload(flags *data.CLIFlags, meta *network.FileMeta) {
 	fmt.Println("Outputfile name: " + path)
 
 	network.ConcurrentDownloader(meta, flags.Thread, path)
-	fmt.Printf("Download finished in: %v", time.Since(start))
+	fmt.Println("Download finished in: ", time.Since(start))
 }
 
 func main() {
 	flags := data.ParseCLIFlags()
 	if flags.Version {
-		fmt.Printf("Blazer version: [%v]\n", data.VERSION)
+		fmt.Println("Blazer version: ", data.VERSION)
 		return
 	}
 	setup(flags)

@@ -18,12 +18,12 @@ type FileMeta struct {
 func GetFileMeta(url string) *FileMeta {
 	r, err := BuildRequest(http.MethodHead, url)
 	if err != nil {
-		fmt.Printf("Error building URL %v", err)
+		fmt.Println("Error building URL", err)
 	}
 
 	resp, err := HTTPClient().Do(r)
 	if err != nil {
-		fmt.Printf("Error fetching meta details of URL %v", err)
+		fmt.Println("Error fetching meta details of URL ", err)
 	}
 
 	meta := FileMeta{
