@@ -12,12 +12,11 @@ package:
 	echo "binary is now globally available"
 
 release:
-	echo "checkout to main"
-	echo "download latest code from origin/main"
-	echo "update changelog"
-	echo "Update gloabal constant's variable"
-	echo "Create tag with current commit"
-	echo "build latest file and upload to release"
-	echo "build binary for mac and windows - 64 bit"
+	echo "continue in dev branch"
+	echo "update changelog, global constant's version"
+	echo "commit current changes"
+	echo "checkout to main and pull latest code"
+	echo "Create tag and push tags - git push --tags"
+	echo "build binaries [binary for mac and windows - 64 bit]"
 	gox -parallel=3  -os="darwin windows linux" -arch="amd64"
 	
