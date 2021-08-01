@@ -23,9 +23,7 @@ Usage of blazer:
 
 ## Install
 
-- Get latest build here: https://github.com/arvpyrna/blazer/releases
-
-- or build from source: 
+build from source: 
 
 ```
 git clone git@github.com:arvpyrna/blazer.git
