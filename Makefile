@@ -13,6 +13,9 @@ package:
 
 release:
 	echo "checkout to main"
+	git checkout main
+	echo "download latest code from origin/main"
+	git pull origin main
 	echo "update changelog"
 	echo "Create tag with current commit"
 	echo "build latest file and upload to release"
