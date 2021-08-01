@@ -1,6 +1,7 @@
 package data
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -29,11 +30,11 @@ func CreateDir(folderName string, dirPath string) {
 	}
 }
 
-func MergeFiles(chunks *Chunks, outputName string) {
-	println("Merging files..")
+func MergeFiles(chunks *Chunks, outputName string) error {
+	fmt.Println("Merging files..")
 	f, err := os.OpenFile(outputName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, os.ModePerm)
 	if err != nil {
-		fmt.Printf("Error opening file: %v", err)
+		return err
 	}
 	defer f.Close()
 
@@ -42,24 +43,23 @@ func MergeFiles(chunks *Chunks, outputName string) {
 		fileName := SegmentFilePath(SESSION_ID, i)
 		data, err := ioutil.ReadFile(fileName)
 		if err != nil {
-			fmt.Println(err)
+			return err
 		}
 		bytes, err := f.Write(data)
 		if err != nil {
-			fmt.Println(err)
+			return err
 		}
 		err = os.Remove(fileName)
 		if err != nil {
-			fmt.Println(err)
+			return err
 		}
 		bytesMerged += bytes
 	}
 
-	// Check if download complete
 	if bytesMerged == chunks.TotalSize {
 		fmt.Println("File downloaded successfully..")
 	} else {
-		fmt.Println("File download is incomplete, retry")
+		return errors.New("file download is incomplete, retry")
 	}
-	// finally check if the SHA matches and also check if the content length matches with
+	return nil
 }

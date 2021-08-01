@@ -15,16 +15,20 @@ type FileMeta struct {
 	ContentType   string
 }
 
-// check for null response and in such cases you can use, default thread to download
-func GetFileMeta(url string) *FileMeta {
+func GetFileMeta(url string) (*FileMeta, error) {
 	r, err := BuildRequest(http.MethodHead, url)
 	if err != nil {
-		fmt.Printf("Error building URL %v", err)
+		return nil, err
 	}
 
 	resp, err := HTTPClient().Do(r)
+
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("received un-expected status code: %v resp: %v", resp.StatusCode, resp)
+	}
+
 	if err != nil {
-		fmt.Printf("Error fetching meta details of URL %v", err)
+		return nil, err
 	}
 
 	meta := FileMeta{
@@ -33,5 +37,5 @@ func GetFileMeta(url string) *FileMeta {
 		ContentType:   r.Header.Get("Content-Type"),
 		FileName:      path.Base(r.URL.Path),
 	}
-	return &meta
+	return &meta, nil
 }

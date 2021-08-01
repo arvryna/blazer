@@ -12,7 +12,6 @@ func BuildRequest(method string, url string) (*http.Request, error) {
 	return r, err
 }
 
-// To avoid TLS handshake
 // https://stackoverflow.com/questions/41719797/tls-handshake-timeout-on-requesting-data-concurrently-from-api
 func HTTPClient() *http.Client {
 	t := &http.Transport{
