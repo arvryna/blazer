@@ -27,6 +27,12 @@ func setup(flags *data.CLIFlags) {
 		data.CreateDir(data.TempDirectory(data.SESSION_ID), ".")
 	}
 	initiateDownload(flags, meta)
+
+	// Check file integrity
+	if flags.Checksum != "" {
+		res := data.FileIntegrityCheck("sha256", meta.FileName, flags.Checksum)
+		fmt.Printf("\nFile integrity: %v\n", res)
+	}
 	data.DeleteFile(data.TempDirectory(data.SESSION_ID))
 }
 
@@ -38,7 +44,7 @@ func initiateDownload(flags *data.CLIFlags, meta *network.FileMeta) {
 		path = meta.FileName
 	}
 
-	fmt.Println(path)
+	fmt.Println("Outputfile name: " + path)
 
 	network.ConcurrentDownloader(meta, flags.Thread, path)
 	fmt.Printf("Download finished in: %v", time.Since(start))

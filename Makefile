@@ -18,4 +18,6 @@ release:
 	echo "Update gloabal constant's variable"
 	echo "Create tag with current commit"
 	echo "build latest file and upload to release"
+	echo "build binary for mac and windows - 64 bit"
+	gox -parallel=3  -os="darwin windows linux" -arch="amd64"
 	

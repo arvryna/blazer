@@ -1,9 +1,14 @@
 package data
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"flag"
 	"fmt"
 	"hash/fnv"
+	"io"
+	"os"
+	"strings"
 )
 
 type CLIFlags struct {
@@ -13,6 +18,29 @@ type CLIFlags struct {
 	Verbose    bool
 	Checksum   string
 	Version    bool
+}
+
+func FileIntegrityCheck(hashFunc string, path string, expected string) bool {
+	if strings.ToLower(hashFunc) == "sha256" {
+		return (expected == GenChecksumSha256(path))
+	} else {
+		fmt.Printf("%v: not implemented yet", hashFunc)
+		return false
+	}
+}
+
+func GenChecksumSha256(path string) string {
+	f, err := os.Open(path)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f.Close()
+
+	hasher := sha256.New()
+	if _, err := io.Copy(hasher, f); err != nil {
+		fmt.Println(err)
+	}
+	return hex.EncodeToString(hasher.Sum(nil))
 }
 
 func GenHash(s string, threadCount int) string {
