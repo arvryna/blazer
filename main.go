@@ -11,7 +11,11 @@ import (
 // Life cycle of the app
 func setup(flags *data.CLIFlags) {
 	fmt.Println("Fetching file meta..")
-	meta := network.GetFileMeta(flags.Url)
+	meta, err := network.GetFileMeta(flags.Url)
+	if err != nil {
+		fmt.Println("Can't initiate download", err)
+		return
+	}
 
 	// Logging important info to user
 	fmt.Println("File size: " + data.GetFormattedSize(meta.ContentLength))
@@ -51,7 +55,11 @@ func initiateDownload(flags *data.CLIFlags, meta *network.FileMeta) {
 }
 
 func main() {
-	flags := data.ParseCLIFlags()
+	flags, err := data.ParseCLIFlags()
+	if err != nil {
+		fmt.Println("Error parsing flags: ", err)
+		return
+	}
 	if flags.Version {
 		fmt.Println("Blazer version: ", data.VERSION)
 		return
