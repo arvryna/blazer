@@ -1,7 +1,7 @@
 # v0.3-beta
 ### Features
 - Checksum verification SHA256
-- Guarentee per segment download
+- Guarantee per segment download
 - Handle network errors in segment download, validations
 - Indicate download status if download is resumed
 

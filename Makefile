@@ -16,7 +16,7 @@ release:
 	echo "update changelog, global constant's version"
 	echo "commit current changes"
 	echo "checkout to main and pull latest code"
-	echo "Create tag"
+	echo "Create tag and push tags - git push --tags"
 	echo "build binaries [binary for mac and windows - 64 bit]"
 	gox -parallel=3  -os="darwin windows linux" -arch="amd64"
 	
