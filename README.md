@@ -23,6 +23,9 @@ Usage of blazer:
 
 ```
 
+## Demo
+[![asciicast](https://asciinema.org/a/DInboSaUY2Ik9JIOcY4vZHRY9.svg)](https://asciinema.org/a/DInboSaUY2Ik9JIOcY4vZHRY9)
+
 ## Install
 
 - Download 64bit binary from releases: https://github.com/arvpyrna/blazer/releases
