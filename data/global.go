@@ -5,7 +5,7 @@ import "fmt"
 var SESSION_ID string = ""
 
 // Constants
-const VERSION = "0.2-alpha"
+const VERSION = "0.3-beta"
 const DEFAULT_THREAD_COUNT = 10
 const MEM_UNIT = 1024
 
