@@ -36,15 +36,31 @@ func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 		}()
 	}
 	wg.Wait()
+
+	// Do not merge file, if download has filed
+	// if the file to download is already there, you can skip the download
 	err := data.MergeFiles(chunks, outputName)
 	if err != nil {
 		fmt.Println("File merging failed ", err)
 	}
 }
 
+func acceptedStatusCodes(code int) bool {
+	table := map[int]string{
+		200: "OK",
+		206: "Partial content",
+	}
+	return table[code] != ""
+}
+
 func DownloadSegment(request *http.Request, i int, r data.Range) error {
 	request.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", r.Start, r.End))
 	resp, err := HTTPClient().Do(request)
+
+	if !acceptedStatusCodes(resp.StatusCode) {
+		return fmt.Errorf("received [un-expected] status code: %v resp: %v", resp.StatusCode, resp)
+	}
+
 	if err != nil {
 		return err
 	}
@@ -64,7 +80,7 @@ func DownloadSegment(request *http.Request, i int, r data.Range) error {
 	if len(bytes) == int(resp.ContentLength) {
 		fmt.Println("Downloaded segment: ", i)
 	} else {
-		return fmt.Errorf("Incomplete segment: ", i, "content-len", resp.ContentLength)
+		return fmt.Errorf("incomplete segment: %v content-len %v", i, resp.ContentLength)
 	}
 	return nil
 }

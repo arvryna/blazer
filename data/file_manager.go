@@ -1,6 +1,7 @@
 package data
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -58,7 +59,7 @@ func MergeFiles(chunks *Chunks, outputName string) error {
 	if bytesMerged == chunks.TotalSize {
 		fmt.Println("File downloaded successfully..")
 	} else {
-		return fmt.Errorf("File download is incomplete, retry")
+		return errors.New("file download is incomplete, retry")
 	}
 	return nil
 }

@@ -22,6 +22,11 @@ func GetFileMeta(url string) *FileMeta {
 	}
 
 	resp, err := HTTPClient().Do(r)
+
+	if resp.StatusCode != 200 {
+		fmt.Printf("received un-expected status code: %v resp: %v", resp.StatusCode, resp)
+	}
+
 	if err != nil {
 		fmt.Println("Error fetching meta details of URL ", err)
 	}
