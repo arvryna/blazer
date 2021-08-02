@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/arvpyrna/blazer/data"
-	"github.com/arvpyrna/blazer/network"
+	"github.com/arvyshka/blazer/data"
+	"github.com/arvyshka/blazer/network"
 )
 
 // Life cycle of the app
