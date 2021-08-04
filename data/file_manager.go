@@ -14,7 +14,7 @@ func FileExists(name string) bool {
 	return !os.IsNotExist(err)
 }
 
-// Delete file/folder
+// Delete file/folder.
 func DeleteFile(name string) {
 	err := os.RemoveAll(name)
 	if err != nil {

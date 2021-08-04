@@ -8,7 +8,7 @@ import (
 	"github.com/arvyshka/blazer/network"
 )
 
-// Life cycle of the app
+// Life cycle of the app.
 func setup(flags *data.CLIFlags) {
 	fmt.Println("Fetching file meta..")
 	meta, err := network.GetFileMeta(flags.Url)

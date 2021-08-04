@@ -4,12 +4,12 @@ import "fmt"
 
 var SESSION_ID string = ""
 
-// Constants
+// Constants.
 const VERSION = "0.3-beta"
 const DEFAULT_THREAD_COUNT = 10
 const MEM_UNIT = 1024
 
-// Functions
+// Functions.
 func TempDirectory(session string) string {
 	return fmt.Sprintf(".blazer_temp-%v", session)
 }
