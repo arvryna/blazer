@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/arvyshka/blazer/data"
-	"github.com/arvyshka/blazer/network"
+	"github.com/arvyshka/blazer/pkg/data"
+	"github.com/arvyshka/blazer/pkg/network"
 )
 
 func Start() {
