@@ -1,8 +1,11 @@
-package data
+package cmd
 
 import (
 	"errors"
 	"flag"
+
+	"github.com/arvyshka/blazer/internals"
+	"github.com/arvyshka/blazer/internals/network"
 )
 
 type CLIFlags struct {
@@ -18,7 +21,7 @@ func (f *CLIFlags) Parse() error {
 	ver := flag.Bool("v", false, "Prints current version of blazer")
 	urlString := flag.String("url", "", "Valid URL to download")
 	out := flag.String("out", "", "Output path to store the downloaded file")
-	t := flag.Int("t", DefaultThreadCount, "Thread count - Number of concurrent downloads")
+	t := flag.Int("t", internals.DefaultThreadCount, "Thread count - Number of concurrent downloads")
 	checksum := flag.String("checksum", "", "Checksum SHA256(currently supported) to verify file")
 
 	flag.Parse()
@@ -27,7 +30,7 @@ func (f *CLIFlags) Parse() error {
 		return errors.New("url is mandatory")
 	}
 
-	if !IsValidURL(*urlString) {
+	if !network.IsValidURL(*urlString) {
 		return errors.New("invalid URL")
 	}
 

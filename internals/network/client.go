@@ -3,15 +3,24 @@ package network
 import (
 	"net"
 	"net/http"
+	"net/url"
 	"time"
 )
 
+// URL validation
+func IsValidURL(str string) bool {
+	u, err := url.Parse(str)
+	return err == nil && u.Scheme != "" && u.Host != ""
+}
+
+// Build request object with custom header
 func BuildRequest(method string, url string) (*http.Request, error) {
 	r, err := http.NewRequest(method, url, nil)
 	r.Header.Set("User-Agent", "Blazer")
 	return r, err
 }
 
+// HTTP Client optimized for concurrent download
 // https://stackoverflow.com/questions/41719797/tls-handshake-timeout-on-requesting-data-concurrently-from-api
 func HTTPClient() *http.Client {
 	t := &http.Transport{

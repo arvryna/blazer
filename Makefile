@@ -2,7 +2,7 @@ blazer:
 	rm -rf build
 	mkdir build
 	go build -o build/blazer main.go
-	echo "Binary is build successfully"
+	echo "Binary is built"
 
 package:
 	rm -rf build
