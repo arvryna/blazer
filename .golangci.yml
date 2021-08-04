@@ -23,30 +23,31 @@ linters:
     - unconvert
     - unused
     - varcheck
+    - golint
     # - golint is replaced by review
     - revive
     - whitespace
     - asciicheck
     - depguard
     - dogsled
-  # - dupl
-  # - exhaustive
+    - goconst
+    - dupl
+    - exhaustive
   # - exportloopref
   # - funlen
   # - gci
   # - gochecknoglobals
-  # - gochecknoinits
+    - gochecknoinits
   # - gocognit
-    - goconst
-  # - gocritic
-  # - gocyclo
-  # - godot
-  # - godox
+    - gocritic
+    - gocyclo
+    - godot
+    - godox
   # - goerr113
   # - gofumpt
-  # - goheader
+    - goheader
   # - gomnd
-  # - gomodguard
+    - gomodguard
   # - goprintffuncname
   # - interfacer
   # - lll
@@ -55,8 +56,8 @@ linters:
   # - nestif
   # - nlreturn
   # - noctx
-  # - nolintlint
-  # - rowserrcheck
+    - nolintlint
+    - rowserrcheck
     - exportloopref
   # - sqlclosecheck
     - stylecheck
