@@ -23,7 +23,7 @@ Usage of blazer:
 
 ```
 
-## How retries work ?
+## How file resumption work ?
 If download is either interrupted manually or network error (Timeout, RCP - happens if "-t" is a large number than server can handle) then those segments may fail and you may have to restart the download with same URL and thread count for retry to work because, temp folder name is a hash of URL and thread count. 
 
 ## Demo

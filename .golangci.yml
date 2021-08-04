@@ -26,10 +26,9 @@ linters:
     # - golint is replaced by review
     - revive
     - whitespace
-  # these are implicitly disabled:
-  # - asciicheck
-  # - depguard
-  # - dogsled
+    - asciicheck
+    - depguard
+    - dogsled
   # - dupl
   # - exhaustive
   # - exportloopref
@@ -38,7 +37,7 @@ linters:
   # - gochecknoglobals
   # - gochecknoinits
   # - gocognit
-  # - goconst
+    - goconst
   # - gocritic
   # - gocyclo
   # - godot
@@ -51,16 +50,16 @@ linters:
   # - goprintffuncname
   # - interfacer
   # - lll
-  # - maligned
-  # - nakedret
+  #   - maligned
+    - nakedret
   # - nestif
   # - nlreturn
   # - noctx
   # - nolintlint
   # - rowserrcheck
-  # - scopelint
+    - exportloopref
   # - sqlclosecheck
-  # - stylecheck
+    - stylecheck
   # - testpackage
   # - unparam
   # - wsl
