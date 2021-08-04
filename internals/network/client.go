@@ -3,8 +3,14 @@ package network
 import (
 	"net"
 	"net/http"
+	"net/url"
 	"time"
 )
+
+func IsValidURL(str string) bool {
+	u, err := url.Parse(str)
+	return err == nil && u.Scheme != "" && u.Host != ""
+}
 
 func BuildRequest(method string, url string) (*http.Request, error) {
 	r, err := http.NewRequest(method, url, nil)

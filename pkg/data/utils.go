@@ -1,4 +1,4 @@
-package data
+package pkg
 
 import (
 	"crypto/sha256"
@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"hash/fnv"
 	"io"
-	"net/url"
 	"os"
 	"strings"
+
+	"github.com/arvyshka/blazer/internals"
 )
 
 func FileIntegrityCheck(hashFunc string, path string, expected string) bool {
@@ -39,19 +40,14 @@ func GenHash(s string, threadCount int) string {
 	return fmt.Sprintf("%v-%v", hash.Sum32(), threadCount)
 }
 
-func IsValidURL(str string) bool {
-	u, err := url.Parse(str)
-	return err == nil && u.Scheme != "" && u.Host != ""
-}
-
 func GetFormattedSize(size float64) string {
 	i := 0
-	mem := MemoryFormatStrings()
+	mem := internals.MemoryFormatStrings()
 	for {
-		if size < MemUnit {
+		if size < internals.MemUnit {
 			return fmt.Sprintf("%.2f", size) + " " + mem[i]
 		}
-		size /= MemUnit
+		size /= internals.MemUnit
 		i++
 	}
 }

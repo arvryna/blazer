@@ -1,4 +1,11 @@
-package data
+package internals
+
+import (
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"os"
+)
 
 type Range struct {
 	Start int
@@ -38,4 +45,38 @@ func (c *Chunks) ComputeChunks() {
 		r.End = pos
 		c.Segments = append(c.Segments, r)
 	}
+}
+
+func (c *Chunks) Merge(outputName string) error {
+	fmt.Println("Merging files..")
+	f, err := os.OpenFile(outputName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	bytesMerged := 0
+	for i := range c.Segments {
+		fileName := SegmentFilePath(SessionID, i)
+		data, err := ioutil.ReadFile(fileName)
+		if err != nil {
+			return err
+		}
+		bytes, err := f.Write(data)
+		if err != nil {
+			return err
+		}
+		err = os.Remove(fileName)
+		if err != nil {
+			return err
+		}
+		bytesMerged += bytes
+	}
+
+	if bytesMerged == c.TotalSize {
+		fmt.Println("File downloaded successfully..")
+	} else {
+		return errors.New("file download is incomplete, retry")
+	}
+	return nil
 }

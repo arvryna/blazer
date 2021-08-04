@@ -15,29 +15,27 @@ type FileMeta struct {
 	ContentType   string
 }
 
-func GetFileMeta(url string) (*FileMeta, error) {
+func (m *FileMeta) Fetch(url string) error {
 	r, err := BuildRequest(http.MethodHead, url)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	resp, err := HTTPClient().Do(r)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("received un-expected status code: %v resp: %v", resp.StatusCode, resp)
+		return fmt.Errorf("received un-expected status code: %v resp: %v", resp.StatusCode, resp)
 	}
 
-	meta := FileMeta{
-		FileURL:       url,
-		ContentLength: float64(resp.ContentLength),
-		ContentType:   r.Header.Get("Content-Type"),
-		FileName:      path.Base(r.URL.Path),
-	}
-	return &meta, nil
+	m.FileURL = url
+	m.ContentLength = float64(resp.ContentLength)
+	m.ContentType = r.Header.Get("Content-Type")
+	m.FileName = path.Base(r.URL.Path)
+	return nil
 }
