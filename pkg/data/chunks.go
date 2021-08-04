@@ -12,33 +12,30 @@ type Chunks struct {
 	Count     int     // number of chunks
 }
 
-func CalculateChunks(totalSize int, parts int) *Chunks {
-	chunks := Chunks{Count: parts}
-	chunks.TotalSize = totalSize
-	chunks.Size = int(float64(totalSize) / float64(parts))
+func (c *Chunks) ComputeChunks() {
+	c.Size = int(float64(c.TotalSize) / float64(c.Count))
 	pos := -1
-	for i := 0; i < parts; i++ {
+	for i := 0; i < c.Count; i++ {
 		r := Range{}
 		r.Start = pos + 1
-		pos += chunks.Size
+		pos += c.Size
 
 		// Case 1
-		if pos > totalSize {
+		if pos > c.TotalSize {
 			// we have already divided enough segments, so can exit early
-			r.End = totalSize
-			chunks.Count = i + 1
-			chunks.Segments = append(chunks.Segments, r)
+			r.End = c.TotalSize
+			c.Count = i + 1
+			c.Segments = append(c.Segments, r)
 			break
 		}
 
 		// Case 2
-		if (i == parts-1) && pos < totalSize {
-			r.End = totalSize
-			chunks.Segments = append(chunks.Segments, r)
+		if (i == c.Count-1) && pos < c.TotalSize {
+			r.End = c.TotalSize
+			c.Segments = append(c.Segments, r)
 			break
 		}
 		r.End = pos
-		chunks.Segments = append(chunks.Segments, r)
+		c.Segments = append(c.Segments, r)
 	}
-	return &chunks
 }
