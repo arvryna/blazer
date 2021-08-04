@@ -88,7 +88,7 @@ func GetFormattedSize(size float64) string {
 		if size < MemUnit {
 			return fmt.Sprintf("%.2f", size) + " " + mem[i]
 		}
-		size = size / MemUnit
+		size /= MemUnit
 		i++
 	}
 }

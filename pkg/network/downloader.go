@@ -7,7 +7,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/arvyshka/blazer/data"
+	"github.com/arvyshka/blazer/pkg/data"
 )
 
 func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
