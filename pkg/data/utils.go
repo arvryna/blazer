@@ -12,15 +12,7 @@ import (
 	"github.com/arvyshka/blazer/internals"
 )
 
-func FileIntegrityCheck(hashFunc string, path string, expected string) bool {
-	if strings.ToLower(hashFunc) == "sha256" {
-		return (expected == GenChecksumSha256(path))
-	}
-	fmt.Println(hashFunc, ": not implemented yet")
-	return false
-}
-
-func GenChecksumSha256(path string) string {
+func genChecksumSha256(path string) string {
 	f, err := os.Open(path)
 	if err != nil {
 		fmt.Println(err)
@@ -32,6 +24,14 @@ func GenChecksumSha256(path string) string {
 		fmt.Println(err)
 	}
 	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func FileIntegrityCheck(hashFunc string, path string, expected string) bool {
+	if strings.ToLower(hashFunc) == "sha256" {
+		return (expected == genChecksumSha256(path))
+	}
+	fmt.Println(hashFunc, ": not implemented yet")
+	return false
 }
 
 func GenHash(s string, threadCount int) string {

@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 )
 
+// Check if file exist
 func FileExists(name string) bool {
 	_, err := os.Stat(name)
 	return !os.IsNotExist(err)
@@ -20,6 +21,7 @@ func DeleteFile(name string) {
 	}
 }
 
+// Create dir in current directory
 func CreateDir(folderName string, dirPath string) {
 	newpath := filepath.Join(".", folderName)
 	err := os.MkdirAll(newpath, os.ModePerm)

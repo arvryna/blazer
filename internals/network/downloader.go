@@ -19,6 +19,7 @@ func acceptedStatusCodes(code int) bool {
 	return table[code] != ""
 }
 
+// Concurrently download resource with specified concurrency
 func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 	fmt.Println("Download the file in threads: ", thread)
 	chunks := internals.Chunks{Count: thread, TotalSize: int(meta.ContentLength)}
@@ -55,6 +56,7 @@ func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 	}
 }
 
+// Download segment of a specific range
 func DownloadSegment(request *http.Request, segmentID int, r internals.Range) error {
 	request.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", r.Start, r.End))
 	resp, err := HTTPClient().Do(request)

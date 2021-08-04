@@ -15,6 +15,7 @@ type FileMeta struct {
 	ContentType   string
 }
 
+// Fetch the meta details of a given URL
 func (m *FileMeta) Fetch(url string) error {
 	r, err := BuildRequest(http.MethodHead, url)
 	if err != nil {
