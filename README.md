@@ -31,13 +31,13 @@ If download is either interrupted manually or network error (Timeout, RCP - happ
 
 ## Install
 
-- Download 64bit binary from releases: https://github.com/arvpyrna/blazer/releases
+- Download 64bit binary from releases: https://github.com/arvyshka/blazer/releases
 
 or
 
 - Build from source: 
 
 ```
-git clone git@github.com:arvpyrna/blazer.git
+git clone git@github.com:arvyshka/blazer.git
 make package
 ```

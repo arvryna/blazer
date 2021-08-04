@@ -14,7 +14,7 @@ func FileExists(name string) bool {
 	return !os.IsNotExist(err)
 }
 
-// Delete file/folder
+// Delete file/folder.
 func DeleteFile(name string) {
 	err := os.RemoveAll(name)
 	if err != nil {
@@ -40,7 +40,7 @@ func MergeFiles(chunks *Chunks, outputName string) error {
 
 	bytesMerged := 0
 	for i := range chunks.Segments {
-		fileName := SegmentFilePath(SESSION_ID, i)
+		fileName := SegmentFilePath(SessionID, i)
 		data, err := ioutil.ReadFile(fileName)
 		if err != nil {
 			return err

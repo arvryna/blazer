@@ -7,7 +7,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/arvpyrna/blazer/data"
+	"github.com/arvyshka/blazer/data"
 )
 
 func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
@@ -16,11 +16,11 @@ func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 	var wg sync.WaitGroup
 	for i, segment := range chunks.Segments {
 		// if segment exist skip current segment download
-		if data.FileExists(data.SegmentFilePath(data.SESSION_ID, i)) {
+		if data.FileExists(data.SegmentFilePath(data.SessionID, i)) {
 			// fmt.Println("Segment Id: ", i, "already downloaded")
 			continue
 		}
-		request, err := BuildRequest(http.MethodGet, meta.FileUrl)
+		request, err := BuildRequest(http.MethodGet, meta.FileURL)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -56,13 +56,14 @@ func acceptedStatusCodes(code int) bool {
 func DownloadSegment(request *http.Request, i int, r data.Range) error {
 	request.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", r.Start, r.End))
 	resp, err := HTTPClient().Do(request)
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
 
 	if !acceptedStatusCodes(resp.StatusCode) {
 		return fmt.Errorf("received [un-expected] status code: %v resp: %v", resp.StatusCode, resp)
-	}
-
-	if err != nil {
-		return err
 	}
 
 	// read this byte by byte so you can show progress
@@ -71,7 +72,7 @@ func DownloadSegment(request *http.Request, i int, r data.Range) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(data.SegmentFilePath(data.SESSION_ID, i), bytes, os.ModePerm)
+	err = ioutil.WriteFile(data.SegmentFilePath(data.SessionID, i), bytes, os.ModePerm)
 	if err != nil {
 		return err
 	}

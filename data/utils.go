@@ -14,7 +14,7 @@ import (
 )
 
 type CLIFlags struct {
-	Url        string
+	URL        string
 	Thread     int
 	OutputPath string
 	Verbose    bool
@@ -25,10 +25,9 @@ type CLIFlags struct {
 func FileIntegrityCheck(hashFunc string, path string, expected string) bool {
 	if strings.ToLower(hashFunc) == "sha256" {
 		return (expected == GenChecksumSha256(path))
-	} else {
-		fmt.Println(hashFunc, ": not implemented yet")
-		return false
 	}
+	fmt.Println(hashFunc, ": not implemented yet")
+	return false
 }
 
 func GenChecksumSha256(path string) string {
@@ -51,7 +50,7 @@ func GenHash(s string, threadCount int) string {
 	return fmt.Sprintf("%v-%v", hash.Sum32(), threadCount)
 }
 
-func IsValidUrl(str string) bool {
+func IsValidURL(str string) bool {
 	u, err := url.Parse(str)
 	return err == nil && u.Scheme != "" && u.Host != ""
 }
@@ -60,7 +59,7 @@ func ParseCLIFlags() (*CLIFlags, error) {
 	ver := flag.Bool("v", false, "Prints current version of blazer")
 	urlString := flag.String("url", "", "Valid URL to download")
 	out := flag.String("out", "", "Output path to store the downloaded file")
-	t := flag.Int("t", DEFAULT_THREAD_COUNT, "Thread count - Number of concurrent downloads")
+	t := flag.Int("t", DefaultThreadCount, "Thread count - Number of concurrent downloads")
 	checksum := flag.String("checksum", "", "Checksum SHA256(currently supported) to verify file")
 	flag.Parse()
 
@@ -68,12 +67,12 @@ func ParseCLIFlags() (*CLIFlags, error) {
 		return nil, errors.New("url is mandatory")
 	}
 
-	if !IsValidUrl(*urlString) {
+	if !IsValidURL(*urlString) {
 		return nil, errors.New("invalid URL")
 	}
 
 	cliFlags := CLIFlags{
-		Url:        *urlString,
+		URL:        *urlString,
 		OutputPath: *out,
 		Thread:     *t,
 		Checksum:   *checksum,
@@ -86,11 +85,10 @@ func GetFormattedSize(size float64) string {
 	mem := MemoryFormatStrings()
 	i := 0
 	for {
-		if size < MEM_UNIT {
+		if size < MemUnit {
 			return fmt.Sprintf("%.2f", size) + " " + mem[i]
-		} else {
-			size = size / MEM_UNIT
-			i++
 		}
+		size = size / MemUnit
+		i++
 	}
 }

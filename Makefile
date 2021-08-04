@@ -11,6 +11,10 @@ package:
 	sudo cp build/blazer /usr/local/bin/
 	echo "binary is now globally available"
 
+lint:
+	echo "Linting.."
+	golangci-lint run
+
 release:
 	echo "continue in dev branch"
 	echo "update changelog, global constant's version"

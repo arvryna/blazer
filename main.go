@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/arvpyrna/blazer/data"
-	"github.com/arvpyrna/blazer/network"
+	"github.com/arvyshka/blazer/data"
+	"github.com/arvyshka/blazer/network"
 )
 
-// Life cycle of the app
+// Life cycle of the app.
 func setup(flags *data.CLIFlags) {
 	fmt.Println("Fetching file meta..")
-	meta, err := network.GetFileMeta(flags.Url)
+	meta, err := network.GetFileMeta(flags.URL)
 	if err != nil {
 		fmt.Println("Can't initiate download", err)
 		return
@@ -21,14 +21,14 @@ func setup(flags *data.CLIFlags) {
 	fmt.Println("File size: " + data.GetFormattedSize(meta.ContentLength))
 
 	// Generate session ID for current download
-	data.SESSION_ID = data.GenHash(flags.Url, flags.Thread)
+	data.SessionID = data.GenHash(flags.URL, flags.Thread)
 
 	// Using a temp folder in current dir to manage use artifacts of download
-	tempFileDir := data.TempDirectory(data.SESSION_ID)
+	tempFileDir := data.TempDirectory(data.SessionID)
 	if data.FileExists(tempFileDir) {
 		fmt.Println("Resuming download..")
 	} else {
-		data.CreateDir(data.TempDirectory(data.SESSION_ID), ".")
+		data.CreateDir(data.TempDirectory(data.SessionID), ".")
 	}
 	initiateDownload(flags, meta)
 
@@ -37,7 +37,7 @@ func setup(flags *data.CLIFlags) {
 		res := data.FileIntegrityCheck("sha256", meta.FileName, flags.Checksum)
 		fmt.Println("File integrity: ", res)
 	}
-	data.DeleteFile(data.TempDirectory(data.SESSION_ID))
+	data.DeleteFile(data.TempDirectory(data.SessionID))
 }
 
 func initiateDownload(flags *data.CLIFlags, meta *network.FileMeta) {
@@ -61,7 +61,7 @@ func main() {
 		return
 	}
 	if flags.Version {
-		fmt.Println("Blazer version: ", data.VERSION)
+		fmt.Println("Blazer version: ", data.Version)
 		return
 	}
 	setup(flags)

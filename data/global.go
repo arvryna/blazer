@@ -2,20 +2,20 @@ package data
 
 import "fmt"
 
-var SESSION_ID string = ""
+var SessionID string
 
-// Constants
-const VERSION = "0.3-beta"
-const DEFAULT_THREAD_COUNT = 10
-const MEM_UNIT = 1024
+// Constants.
+const Version = "0.3-beta"
+const DefaultThreadCount = 10
+const MemUnit = 1024
 
-// Functions
+// Functions.
 func TempDirectory(session string) string {
 	return fmt.Sprintf(".blazer_temp-%v", session)
 }
 
-func SegmentFilePath(session string, fileId int) string {
-	return fmt.Sprintf("%v/s-%v", TempDirectory(session), fileId)
+func SegmentFilePath(session string, fileID int) string {
+	return fmt.Sprintf("%v/s-%v", TempDirectory(session), fileID)
 }
 
 func MemoryFormatStrings() []string {
