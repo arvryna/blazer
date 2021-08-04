@@ -22,8 +22,5 @@ func HTTPClient() *http.Client {
 		// We use ABSURDLY large keys, and should probably not.
 		TLSHandshakeTimeout: 600 * time.Second,
 	}
-	c := &http.Client{
-		Transport: t,
-	}
-	return c
+	return &http.Client{Transport: t}
 }

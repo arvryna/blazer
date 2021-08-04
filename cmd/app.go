@@ -9,7 +9,8 @@ import (
 )
 
 func Start() {
-	flags, err := data.ParseCLIFlags()
+	flags := data.CLIFlags{}
+	err := flags.Parse()
 	if err != nil {
 		fmt.Println("Error parsing flags: ", err)
 		return
@@ -18,7 +19,7 @@ func Start() {
 		fmt.Println("Blazer version: ", data.Version)
 		return
 	}
-	setup(flags)
+	setup(&flags)
 }
 
 // Life cycle of the app.
@@ -36,6 +37,12 @@ func setup(flags *data.CLIFlags) {
 	// Generate session ID for current download
 	data.SessionID = data.GenHash(flags.URL, flags.Thread)
 
+	if data.FileExists(meta.FileName) {
+		// TODO: Also check the File size, just to be sure that it wasn't an incomplete download
+		fmt.Println("File already exists, skipping download")
+		return
+	}
+
 	// Using a temp folder in current dir to manage use artifacts of download
 	tempFileDir := data.TempDirectory(data.SessionID)
 	if data.FileExists(tempFileDir) {
@@ -43,6 +50,7 @@ func setup(flags *data.CLIFlags) {
 	} else {
 		data.CreateDir(data.TempDirectory(data.SessionID), ".")
 	}
+
 	initiateDownload(flags, meta)
 
 	// Check file integrity
@@ -62,7 +70,6 @@ func initiateDownload(flags *data.CLIFlags, meta *network.FileMeta) {
 	}
 
 	fmt.Println("Outputfile name: " + path)
-
 	network.ConcurrentDownloader(meta, flags.Thread, path)
 	fmt.Println("Download finished in: ", time.Since(start))
 }

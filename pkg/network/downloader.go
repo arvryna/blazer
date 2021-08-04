@@ -10,9 +10,18 @@ import (
 	"github.com/arvyshka/blazer/pkg/data"
 )
 
+func acceptedStatusCodes(code int) bool {
+	table := map[int]string{
+		200: "OK",
+		206: "Partial content",
+	}
+	return table[code] != ""
+}
+
 func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 	fmt.Println("Download the file in threads: ", thread)
-	chunks := data.CalculateChunks(int(meta.ContentLength), thread)
+	chunks := data.Chunks{Count: thread, TotalSize: int(meta.ContentLength)}
+	chunks.ComputeChunks()
 	var wg sync.WaitGroup
 	for i, segment := range chunks.Segments {
 		// if segment exist skip current segment download
@@ -39,21 +48,13 @@ func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 
 	// Do not merge file, if download has filed
 	// if the file to download is already there, you can skip the download
-	err := data.MergeFiles(chunks, outputName)
+	err := data.MergeFiles(&chunks, outputName)
 	if err != nil {
 		fmt.Println("File merging failed ", err)
 	}
 }
 
-func acceptedStatusCodes(code int) bool {
-	table := map[int]string{
-		200: "OK",
-		206: "Partial content",
-	}
-	return table[code] != ""
-}
-
-func DownloadSegment(request *http.Request, i int, r data.Range) error {
+func DownloadSegment(request *http.Request, segmentID int, r data.Range) error {
 	request.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", r.Start, r.End))
 	resp, err := HTTPClient().Do(request)
 	if err != nil {
@@ -72,16 +73,16 @@ func DownloadSegment(request *http.Request, i int, r data.Range) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(data.SegmentFilePath(data.SessionID, i), bytes, os.ModePerm)
+	err = ioutil.WriteFile(data.SegmentFilePath(data.SessionID, segmentID), bytes, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
 	// Verify if segment is downloaded successfully
 	if len(bytes) == int(resp.ContentLength) {
-		fmt.Println("Downloaded segment: ", i)
+		fmt.Println("Downloaded segment: ", segmentID)
 	} else {
-		return fmt.Errorf("incomplete segment: %v content-len %v", i, resp.ContentLength)
+		return fmt.Errorf("incomplete segment: %v content-len %v", segmentID, resp.ContentLength)
 	}
 	return nil
 }

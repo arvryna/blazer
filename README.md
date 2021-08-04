@@ -1,5 +1,11 @@
 # Blazer CLI - concurrent file downloader
 
+<p align="left">
+  <a href="https://goreportcard.com/report/github.com/arvyshka/blazer">
+    <img src="https://goreportcard.com/badge/github.com/arvyshka/blazer" />
+  </a>
+</p>
+
 - Control thread count
 - Resume from interruption
 - File integrity check - SHA256
