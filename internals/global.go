@@ -1,5 +1,7 @@
 package internals
 
+// File for storing global constants and functions
+
 import "fmt"
 
 var SessionID string
