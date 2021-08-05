@@ -19,16 +19,16 @@ func acceptedStatusCodes(code int) bool {
 	return table[code] != ""
 }
 
-// Concurrently download resource with specified concurrency
+// Concurrently download resource with specified concurrency.
 func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 	fmt.Println("Download the file in threads: ", thread)
 	chunks := internals.Chunks{Count: thread, TotalSize: int(meta.ContentLength)}
 	chunks.ComputeChunks()
 	var wg sync.WaitGroup
 	for i, segment := range chunks.Segments {
-		// if segment exist skip current segment download
+		// if segment exist skip current segment download.
 		if pkg.FileExists(internals.SegmentFilePath(internals.SessionID, i)) {
-			// fmt.Println("Segment Id: ", i, "already downloaded")
+			// fmt.Println("Segment Id: ", i, "already downloaded").
 			continue
 		}
 		request, err := BuildRequest(http.MethodGet, meta.FileURL)
@@ -48,15 +48,15 @@ func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 	}
 	wg.Wait()
 
-	// Do not merge file, if download has filed
-	// if the file to download is already there, you can skip the download
+	/* Do not merge file, if download has filed
+	if the file to download is already there, you can skip the download. */
 	err := chunks.Merge(outputName)
 	if err != nil {
 		fmt.Println("File merging failed ", err)
 	}
 }
 
-// Download segment of a specific range
+// Download segment of a specific range.
 func DownloadSegment(request *http.Request, segmentID int, r internals.Range) error {
 	request.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", r.Start, r.End))
 	resp, err := HTTPClient().Do(request)
@@ -70,7 +70,7 @@ func DownloadSegment(request *http.Request, segmentID int, r internals.Range) er
 		return fmt.Errorf("received [un-expected] status code: %v resp: %v", resp.StatusCode, resp)
 	}
 
-	// read this byte by byte so you can show progress
+	// read this byte by byte so you can show progress.
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
@@ -81,7 +81,7 @@ func DownloadSegment(request *http.Request, segmentID int, r internals.Range) er
 		return err
 	}
 
-	// Verify if segment is downloaded successfully
+	// Verify if segment is downloaded successfully.
 	if len(bytes) == int(resp.ContentLength) {
 		fmt.Println("Downloaded segment: ", segmentID)
 	} else {

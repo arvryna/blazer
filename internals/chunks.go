@@ -19,7 +19,7 @@ type Chunks struct {
 	Count     int     // number of chunks
 }
 
-// Compute the chunks for a given parts(thread count)
+// Compute the chunks for a given parts(thread count).
 func (c *Chunks) ComputeChunks() {
 	c.Size = int(float64(c.TotalSize) / float64(c.Count))
 	pos := -1
@@ -30,7 +30,7 @@ func (c *Chunks) ComputeChunks() {
 
 		// Case 1
 		if pos > c.TotalSize {
-			// we have already divided enough segments, so can exit early
+			// we have already divided enough segments, so can exit early.
 			r.End = c.TotalSize
 			c.Count = i + 1
 			c.Segments = append(c.Segments, r)
@@ -48,7 +48,7 @@ func (c *Chunks) ComputeChunks() {
 	}
 }
 
-// Merge all segments into a single file
+// Merge all segments into a single file.
 func (c *Chunks) Merge(outputName string) error {
 	fmt.Println("Merging files..")
 	f, err := os.OpenFile(outputName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, os.ModePerm)

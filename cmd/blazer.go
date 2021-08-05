@@ -40,12 +40,12 @@ func setup(flags *CLIFlags) {
 	internals.SessionID = pkg.GenHash(flags.URL, flags.Thread)
 
 	if pkg.FileExists(meta.FileName) {
-		// TODO: Also check the File size, just to be sure that it wasn't an incomplete download
+		// FIX: Also check the File size, just to be sure that it wasn't an incomplete download.
 		fmt.Println("File already exists, skipping download")
 		return
 	}
 
-	// Using a temp folder in current dir to manage use artifacts of download
+	// Using a temp folder in current dir to manage use artifacts of download.
 	tempFileDir := internals.TempDirectory(internals.SessionID)
 	if pkg.FileExists(tempFileDir) {
 		fmt.Println("Resuming download..")
