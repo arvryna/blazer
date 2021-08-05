@@ -7,19 +7,27 @@ import (
 	"os"
 )
 
+// Range represents the interval of the segment.
 type Range struct {
 	Start int
 	End   int
 }
 
+/*
+Chunks: The file that we want to download will be split into multiple pieces represented
+ as Chunks. It captures info about the number of pieces, size of each piece and the
+ interval of each piece (its starting and ending byte value)
+
+ segments: [[0,n1],[n1+1,n1+chunkSize]....[,n]]
+*/
 type Chunks struct {
-	Size      int     // size of a single chunk
-	TotalSize int     // size of the overall file
-	Segments  []Range // segments [[0,n1],[n1+1,n1+chunkSize]....[,n]]
-	Count     int     // number of chunks
+	Size      int
+	TotalSize int
+	Segments  []Range
+	Count     int
 }
 
-// Compute the chunks for a given parts(thread count).
+// ComputeChunks: Compute chunks for a given parts(thread count).
 func (c *Chunks) ComputeChunks() {
 	c.Size = int(float64(c.TotalSize) / float64(c.Count))
 	pos := -1
