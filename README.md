@@ -32,10 +32,10 @@ Usage of blazer:
 ```
 
 ## Benchmarks
-| Name       |Size    | Blazer                  | cURL          | Wget        |
-| -----      |        | -----------             | ----          | -----       |
-| Debian ISO | 300 MB | 1min 10 sec (25 threads)| 2min 40 sec   | 3 min 10 sec|
-| Windows-10 | 5.4 GB |                         |               |             |
+| Name       |Size    | Blazer                  | cURL          | Wget         |
+| -----------|--------| -----------             | ----          | -----        |
+| Debian ISO | 300 MB | 1min 10 sec (25 threads)| 2min 40 sec   | 3 min 10 sec |
+| Windows-10 | 5.4 GB | 20min 52sec (25 threads)| 46min 52 sec  | 40 min 25 sec|
 
 ## How file resumption work ?
 If download is either interrupted manually or network error (Timeout, RCP - happens if "-t" is a large number than server can handle) then those segments may fail and you may have to restart the download with same URL and thread count for retry to work because, temp folder name is a hash of URL and thread count. 
