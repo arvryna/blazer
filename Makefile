@@ -15,6 +15,9 @@ lint:
 	echo "Linting.."
 	golangci-lint run
 
+test:
+	go test ./...
+
 release:
 	echo "continue in dev branch"
 	echo "update changelog, global constant's version"
