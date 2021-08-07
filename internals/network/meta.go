@@ -13,6 +13,7 @@ type FileMeta struct {
 	ServerName    string
 	Age           int
 	ContentType   string
+	AcceptRanges string
 }
 
 // Fetch the meta details of a given URL.
