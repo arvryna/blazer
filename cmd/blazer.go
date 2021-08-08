@@ -60,6 +60,7 @@ func setup(flags *CLIFlags) {
 		res := pkg.FileIntegrityCheck("sha256", meta.FileName, flags.Checksum)
 		fmt.Println("File integrity: ", res)
 	}
+
 	pkg.DeleteFile(internals.TempDirectory(internals.SessionID))
 }
 

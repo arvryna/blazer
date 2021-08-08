@@ -1,4 +1,4 @@
-# Blazer CLI - Concurrent file downloader
+# Blazer - Concurrent file downloader
 
 <p align="left">
   <a href="https://goreportcard.com/report/github.com/arvyshka/blazer">
