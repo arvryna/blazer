@@ -11,9 +11,6 @@ import (
 	pkg "github.com/arvyshka/blazer/pkg/data"
 )
 
-const (
-	OPTIMIZED_DOWNLOAD_UNSUPPORTED  = "Optimized downloading not supported by server!"
-)
 func acceptedStatusCodes(code int) bool {
 	table := map[int]string{
 		200: "OK",
@@ -24,11 +21,6 @@ func acceptedStatusCodes(code int) bool {
 
 // ConcurrentDownloader: Concurrently download the resource with specified concurrency value.
 func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
-	if DoesServerSupportRangeHeader(meta){
-		thread = 1
-		fmt.Println(OPTIMIZED_DOWNLOAD_UNSUPPORTED)
-	}
-
 	fmt.Println("Download the file in threads: ", thread)
 	chunks := internals.Chunks{Count: thread, TotalSize: int(meta.ContentLength)}
 	chunks.ComputeChunks()
@@ -96,8 +88,4 @@ func DownloadSegment(request *http.Request, segmentID int, r internals.Range) er
 		return fmt.Errorf("incomplete segment: %v content-len %v", segmentID, resp.ContentLength)
 	}
 	return nil
-}
-
-func DoesServerSupportRangeHeader(meta *FileMeta) bool{
-	return meta.AcceptRanges != "bytes"
 }
