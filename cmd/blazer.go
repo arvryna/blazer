@@ -9,6 +9,10 @@ import (
 	pkg "github.com/arvyshka/blazer/pkg/data"
 )
 
+const (
+	OPTIMIZED_DOWNLOAD_UNSUPPORTED  = "Optimized downloading not supported by server!"
+)
+
 func Start() {
 	flags := CLIFlags{}
 	err := flags.Parse()
@@ -35,6 +39,11 @@ func setup(flags *CLIFlags) {
 
 	// Logging important info to user
 	fmt.Println("File size: " + pkg.GetFormattedSize(meta.ContentLength))
+
+	if doesServerSupportRangeHeader(&meta){
+		flags.Thread = 1
+		fmt.Println(OPTIMIZED_DOWNLOAD_UNSUPPORTED)
+	}
 
 	// Generate session ID for current download
 	internals.SessionID = pkg.GenHash(flags.URL, flags.Thread)
@@ -75,4 +84,7 @@ func initiateDownload(flags *CLIFlags, meta *network.FileMeta) {
 	fmt.Println("Outputfile name: " + path)
 	network.ConcurrentDownloader(meta, flags.Thread, path)
 	fmt.Println("Download finished in: ", time.Since(start))
+}
+func doesServerSupportRangeHeader(meta *network.FileMeta) bool{
+	return meta.AcceptRanges != "bytes"
 }
