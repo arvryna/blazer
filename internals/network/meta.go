@@ -13,6 +13,7 @@ type FileMeta struct {
 	ServerName    string
 	Age           int
 	ContentType   string
+	AcceptRanges string
 }
 
 // Fetch the meta details of a given URL.
@@ -38,5 +39,6 @@ func (m *FileMeta) Fetch(url string) error {
 	m.ContentLength = float64(resp.ContentLength)
 	m.ContentType = r.Header.Get("Content-Type")
 	m.FileName = path.Base(r.URL.Path)
+	m.AcceptRanges = resp.Header.Get("Accept-Ranges")
 	return nil
 }
