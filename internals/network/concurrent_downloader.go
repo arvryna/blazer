@@ -33,7 +33,7 @@ func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 		}
 		request, err := BuildRequest(http.MethodGet, meta.FileURL)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("Could not build request: ", err)
 		}
 		wg.Add(1)
 		i := i
@@ -48,8 +48,7 @@ func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
 	}
 	wg.Wait()
 
-	/* Do not merge file, if download has filed
-	if the file to download is already there, you can skip the download. */
+	// Do not merge file, if download has filed
 	err := chunks.Merge(outputName)
 	if err != nil {
 		fmt.Println("File merging failed ", err)

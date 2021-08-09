@@ -4,7 +4,11 @@
   <a href="https://goreportcard.com/report/github.com/arvyshka/blazer">
     <img src="https://goreportcard.com/badge/github.com/arvyshka/blazer" />
   </a>
+   <a href="http://makeapullrequest.com">
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" />
+  </a>
 </p>
+
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) 
 
