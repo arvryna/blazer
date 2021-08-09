@@ -9,8 +9,10 @@ import (
 	pkg "github.com/arvyshka/blazer/pkg/data"
 )
 
+// Constant to track the current version of CLI.
+const Version = "0.3-beta"
 const (
-	OPTIMIZED_DOWNLOAD_UNSUPPORTED  = "Optimized downloading not supported by server!"
+	OPTIMIZED_DOWNLOAD_UNSUPPORTED = "Optimized downloading not supported by server!"
 )
 
 func Start() {
@@ -20,33 +22,35 @@ func Start() {
 		fmt.Println("Error parsing flags: ", err)
 		return
 	}
+
+	// If the user only want to check version, show version info and exit
 	if flags.Version {
-		fmt.Println("Blazer version: ", internals.Version)
+		fmt.Println("Blazer version: ", Version)
 		return
 	}
-	setup(&flags)
-}
 
-// Life cycle of the app.
-func setup(flags *CLIFlags) {
 	fmt.Println("Fetching file meta..")
 	meta := network.FileMeta{}
-	err := meta.Fetch(flags.URL)
+	err = meta.Fetch(flags.URL)
 	if err != nil {
 		fmt.Println("Can't initiate download", err)
 		return
 	}
 
-	// Logging important info to user
-	fmt.Println("File size: " + pkg.GetFormattedSize(meta.ContentLength))
-
-	if doesServerSupportRangeHeader(&meta){
+	if doesServerSupportRangeHeader(&meta) {
 		flags.Thread = 1
 		fmt.Println(OPTIMIZED_DOWNLOAD_UNSUPPORTED)
 	}
 
 	// Generate session ID for current download
-	internals.SessionID = pkg.GenHash(flags.URL, flags.Thread)
+	sessionID := pkg.GenHash(flags.URL, flags.Thread)
+	manageDownloadFlow(&flags, &meta, sessionID)
+}
+
+func manageDownloadFlow(flags *CLIFlags, meta *network.FileMeta, sessionID string) {
+
+	// Logging important info to user
+	fmt.Println("File size: " + pkg.GetFormattedSize(meta.ContentLength))
 
 	if pkg.FileExists(meta.FileName) {
 		// FIX: Also check the File size, just to be sure that it wasn't an incomplete download.
@@ -55,36 +59,51 @@ func setup(flags *CLIFlags) {
 	}
 
 	// Using a temp folder in current dir to manage use artifacts of download.
-	tempFileDir := internals.TempDirectory(internals.SessionID)
+	tempFileDir := internals.TempDirectory(sessionID)
 	if pkg.FileExists(tempFileDir) {
 		fmt.Println("Resuming download..")
 	} else {
-		pkg.CreateDir(internals.TempDirectory(internals.SessionID), ".")
+		pkg.CreateDir(internals.TempDirectory(sessionID), ".")
 	}
 
-	initiateDownload(flags, &meta)
+	isDownloadComplete := downloadAndMerge(flags, meta, sessionID)
 
-	// Check file integrity
-	if flags.Checksum != "" {
-		res := pkg.FileIntegrityCheck("sha256", meta.FileName, flags.Checksum)
-		fmt.Println("File integrity: ", res)
+	if isDownloadComplete {
+		// Perform file integrity check
+		if flags.Checksum != "" {
+			res := pkg.FileIntegrityCheck("sha256", meta.FileName, flags.Checksum)
+			fmt.Println("File integrity: ", res)
+		}
+		pkg.DeleteFile(internals.TempDirectory(sessionID))
 	}
-
-	pkg.DeleteFile(internals.TempDirectory(internals.SessionID))
 }
 
-func initiateDownload(flags *CLIFlags, meta *network.FileMeta) {
+func downloadAndMerge(flags *CLIFlags, meta *network.FileMeta, sessionID string) bool {
+	fmt.Println("Download the file in threads: ", flags.Thread)
+	outputPath := flags.OutputPath
+	if outputPath == "" {
+		outputPath = meta.FileName
+	}
+
+	fmt.Println("Outputfile name: " + outputPath)
+
 	start := time.Now()
+	chunks, isDownloadComplete := network.ConcurrentDownloader(meta, flags.Thread, sessionID)
 
-	path := flags.OutputPath
-	if path == "" {
-		path = meta.FileName
+	if isDownloadComplete {
+		fmt.Println("Download finished in: ", time.Since(start))
+		fmt.Println("Merging downloaded files...")
+		err := chunks.Merge(outputPath, sessionID)
+		if err != nil {
+			fmt.Println("File merging failed ", err)
+		}
+	} else {
+		fmt.Println("Download failed: Some segments were not downloaded, please re-intiate the download")
 	}
 
-	fmt.Println("Outputfile name: " + path)
-	network.ConcurrentDownloader(meta, flags.Thread, path)
-	fmt.Println("Download finished in: ", time.Since(start))
+	return isDownloadComplete
 }
-func doesServerSupportRangeHeader(meta *network.FileMeta) bool{
+
+func doesServerSupportRangeHeader(meta *network.FileMeta) bool {
 	return meta.AcceptRanges != "bytes"
 }

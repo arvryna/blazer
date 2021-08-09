@@ -20,43 +20,45 @@ func acceptedStatusCodes(code int) bool {
 }
 
 // ConcurrentDownloader: Concurrently download the resource with specified concurrency value.
-func ConcurrentDownloader(meta *FileMeta, thread int, outputName string) {
-	fmt.Println("Download the file in threads: ", thread)
+// it returns download status as bool
+func ConcurrentDownloader(meta *FileMeta, thread int, sessionID string) (*internals.Chunks, bool) {
+	isDownloadComplete := true
 	chunks := internals.Chunks{Count: thread, TotalSize: int(meta.ContentLength)}
 	chunks.ComputeChunks()
 	var wg sync.WaitGroup
 	for i, segment := range chunks.Segments {
+
 		// if segment exist skip current segment download.
-		if pkg.FileExists(internals.SegmentFilePath(internals.SessionID, i)) {
+		if pkg.FileExists(internals.SegmentFilePath(sessionID, i)) {
 			// fmt.Println("Segment Id: ", i, "already downloaded").
 			continue
 		}
 		request, err := BuildRequest(http.MethodGet, meta.FileURL)
 		if err != nil {
 			fmt.Println("Could not build request: ", err)
+			isDownloadComplete = false
 		}
 		wg.Add(1)
+
 		i := i
 		segment := segment
+
+		// Downoading individual segments in go routines
 		go func() {
 			defer wg.Done()
-			err = DownloadSegment(request, i, segment)
+			err = DownloadSegment(request, i, segment, sessionID)
 			if err != nil {
+				isDownloadComplete = false
 				fmt.Println("Download segment failed: ", i, err)
 			}
 		}()
 	}
 	wg.Wait()
-
-	// Do not merge file, if download has filed
-	err := chunks.Merge(outputName)
-	if err != nil {
-		fmt.Println("File merging failed ", err)
-	}
+	return &chunks, isDownloadComplete
 }
 
 // DownloadSegment: download a specific piece of the bytes of the file that we want to download.
-func DownloadSegment(request *http.Request, segmentID int, r internals.Range) error {
+func DownloadSegment(request *http.Request, segmentID int, r internals.Range, sessionID string) error {
 	request.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", r.Start, r.End))
 	resp, err := HTTPClient().Do(request)
 	if err != nil {
@@ -75,7 +77,7 @@ func DownloadSegment(request *http.Request, segmentID int, r internals.Range) er
 		return err
 	}
 
-	err = ioutil.WriteFile(internals.SegmentFilePath(internals.SessionID, segmentID), bytes, os.ModePerm)
+	err = ioutil.WriteFile(internals.SegmentFilePath(sessionID, segmentID), bytes, os.ModePerm)
 	if err != nil {
 		return err
 	}
