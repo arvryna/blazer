@@ -12,7 +12,7 @@ import (
 // Constant to track the current version of CLI.
 const Version = "0.3-beta"
 const (
-	OPTIMIZED_DOWNLOAD_UNSUPPORTED = "Optimized downloading not supported by server!"
+	Optimized_Download_Unsupported = "Optimized downloading not supported by server!"
 )
 
 func Start() {
@@ -39,7 +39,7 @@ func Start() {
 
 	if doesServerSupportRangeHeader(&meta) {
 		flags.Thread = 1
-		fmt.Println(OPTIMIZED_DOWNLOAD_UNSUPPORTED)
+		fmt.Println(Optimized_Download_Unsupported)
 	}
 
 	// Generate session ID for current download

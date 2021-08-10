@@ -9,9 +9,6 @@
   </a>
 </p>
 
-
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) 
-
 - Control thread count
 - Resume from interruption
 - File integrity check - SHA256
