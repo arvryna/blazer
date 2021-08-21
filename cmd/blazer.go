@@ -10,7 +10,7 @@ import (
 )
 
 // Constant to track the current version of CLI.
-const Version = "0.3-beta"
+const Version = "0.4-beta"
 const (
 	Optimized_Download_Unsupported = "Optimized downloading not supported by server!"
 )
