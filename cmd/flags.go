@@ -4,7 +4,6 @@ import (
 	"errors"
 	"flag"
 
-	"github.com/arvyshka/blazer/internals"
 	"github.com/arvyshka/blazer/internals/network"
 )
 
@@ -17,11 +16,14 @@ type CLIFlags struct {
 	Version    bool
 }
 
+// Default number of threads used for download if user don't specify thread count.
+const DefaultThreadCount = 10
+
 func (f *CLIFlags) Parse() error {
 	ver := flag.Bool("v", false, "Prints current version of blazer")
 	urlString := flag.String("url", "", "Valid URL to download")
 	out := flag.String("out", "", "Output path to store the downloaded file")
-	t := flag.Int("t", internals.DefaultThreadCount, "Thread count - Number of concurrent downloads")
+	t := flag.Int("t", DefaultThreadCount, "Thread count - Number of concurrent downloads")
 	checksum := flag.String("checksum", "", "Checksum SHA256(currently supported) to verify file")
 
 	flag.Parse()

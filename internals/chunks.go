@@ -57,8 +57,7 @@ func (c *Chunks) ComputeChunks() {
 }
 
 // Merge all segments into a single file.
-func (c *Chunks) Merge(outputName string) error {
-	fmt.Println("Merging files..")
+func (c *Chunks) Merge(outputName string, sessionID string) error {
 	f, err := os.OpenFile(outputName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, os.ModePerm)
 	if err != nil {
 		return err
@@ -67,7 +66,7 @@ func (c *Chunks) Merge(outputName string) error {
 
 	bytesMerged := 0
 	for i := range c.Segments {
-		fileName := SegmentFilePath(SessionID, i)
+		fileName := SegmentFilePath(sessionID, i)
 		data, err := ioutil.ReadFile(fileName)
 		if err != nil {
 			return err

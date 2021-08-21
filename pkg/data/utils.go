@@ -8,9 +8,9 @@ import (
 	"io"
 	"os"
 	"strings"
-
-	"github.com/arvyshka/blazer/internals"
 )
+
+const MemUnit = 1024
 
 func genChecksumSha256(path string) string {
 	f, err := os.Open(path)
@@ -40,14 +40,18 @@ func GenHash(s string, threadCount int) string {
 	return fmt.Sprintf("%v-%v", hash.Sum32(), threadCount)
 }
 
+func MemoryFormatStrings() []string {
+	return []string{"b", "kb", "mb", "gb", "tb", "pb"}
+}
+
 func GetFormattedSize(size float64) string {
 	i := 0
-	mem := internals.MemoryFormatStrings()
+	mem := MemoryFormatStrings()
 	for {
-		if size < internals.MemUnit {
+		if size < MemUnit {
 			return fmt.Sprintf("%.2f", size) + " " + mem[i]
 		}
-		size /= internals.MemUnit
+		size /= MemUnit
 		i++
 	}
 }
