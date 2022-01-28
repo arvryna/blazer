@@ -1,4 +1,6 @@
-package pkg
+package util
+
+// File for storing global constants and functions
 
 import (
 	"crypto/sha256"
@@ -6,9 +8,48 @@ import (
 	"fmt"
 	"hash/fnv"
 	"io"
+	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
+
+// Create a directory with session ID, Session ID is hash of URL and threadcount.
+func TempDirectory(session string) string {
+	return fmt.Sprintf(".blazer_temp-%v", session)
+}
+
+/*
+* Segments are stored in side the temproary directory above,
+* there are n segments, n represents threadcount. if thread = 10
+* there will be 10 segments in the temp folder.
+ */
+func SegmentFilePath(session string, fileID int) string {
+	return fmt.Sprintf("%v/s-%v", TempDirectory(session), fileID)
+}
+
+// Check if file exist.
+func FileExists(name string) bool {
+	_, err := os.Stat(name)
+	return !os.IsNotExist(err)
+}
+
+// Delete file/folder.
+func DeleteFile(name string) {
+	err := os.RemoveAll(name)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// Create dir in current directory.
+func CreateDir(folderName string, dirPath string) {
+	newpath := filepath.Join(".", folderName)
+	err := os.MkdirAll(newpath, os.ModePerm)
+	if err != nil {
+		fmt.Println("Error creating directory")
+	}
+}
 
 const MemUnit = 1024
 

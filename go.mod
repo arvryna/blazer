@@ -1,3 +1,3 @@
-module github.com/arvyshka/blazer
+module github.com/arvryna/blazer
 
 go 1.16

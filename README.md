@@ -1,8 +1,8 @@
 # Blazer - Concurrent file downloader
 
 <p align="left">
-  <a href="https://goreportcard.com/report/github.com/arvyshka/blazer">
-    <img src="https://goreportcard.com/badge/github.com/arvyshka/blazer" />
+  <a href="https://goreportcard.com/report/github.com/arvryna/blazer">
+    <img src="https://goreportcard.com/badge/github.com/arvryna/blazer" />
   </a>
    <a href="http://makeapullrequest.com">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" />
@@ -46,13 +46,13 @@ If download is either interrupted manually or network error (Timeout, RCP - happ
 
 ## Install
 
-- Download 64bit binary from releases: https://github.com/arvyshka/blazer/releases
+- Download 64bit binary from releases: https://github.com/arvryna/blazer/releases
 
 or
 
 - Build from source: 
 
 ```
-git clone git@github.com:arvyshka/blazer.git
+git clone git@github.com:arvryna/blazer.git
 make package
 ```
