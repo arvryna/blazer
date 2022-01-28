@@ -67,6 +67,7 @@ Blazer makes use of [RFC7233](https://datatracker.ietf.org/doc/html/rfc7233) to 
 * File resumption won't work if the number of threads used is different from the previous attempt.
 
 # Roadmap:
+
 * Possiblity of adding a config file for ~/.blazerc in home directory, to add new features like storing history of downloads
 * Ability to perform concurrent file uploads
 * Figuring out optimal thread count at runtime by considering various factors like network speed, server bandwidth, etc.,
