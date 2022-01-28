@@ -1,6 +1,6 @@
 package main
 
-import "github.com/arvyshka/blazer/cmd"
+import "github.com/arvryna/blazer/cmd"
 
 func main() {
 	cmd.Start()

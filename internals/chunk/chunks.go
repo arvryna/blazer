@@ -1,10 +1,12 @@
-package internals
+package chunk
 
 import (
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
+
+	"github.com/arvryna/blazer/internals/util"
 )
 
 // Range represents the interval of the segment.
@@ -66,7 +68,7 @@ func (c *Chunks) Merge(outputName string, sessionID string) error {
 
 	bytesMerged := 0
 	for i := range c.Segments {
-		fileName := SegmentFilePath(sessionID, i)
+		fileName := util.SegmentFilePath(sessionID, i)
 		data, err := ioutil.ReadFile(fileName)
 		if err != nil {
 			return err

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"flag"
 
-	"github.com/arvyshka/blazer/internals/network"
+	"github.com/arvryna/blazer/internals/network"
 )
 
 type CLIFlags struct {

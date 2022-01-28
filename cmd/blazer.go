@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/arvyshka/blazer/internals"
-	"github.com/arvyshka/blazer/internals/network"
-	pkg "github.com/arvyshka/blazer/pkg/data"
+	"github.com/arvryna/blazer/internals/network"
+	"github.com/arvryna/blazer/internals/util"
 )
 
 // Constant to track the current version of CLI.
@@ -43,27 +42,27 @@ func Start() {
 	}
 
 	// Generate session ID for current download
-	sessionID := pkg.GenHash(flags.URL, flags.Thread)
+	sessionID := util.GenHash(flags.URL, flags.Thread)
 	manageDownloadFlow(&flags, &meta, sessionID)
 }
 
 func manageDownloadFlow(flags *CLIFlags, meta *network.FileMeta, sessionID string) {
 
 	// Logging important info to user
-	fmt.Println("File size: " + pkg.GetFormattedSize(meta.ContentLength))
+	fmt.Println("File size: " + util.GetFormattedSize(meta.ContentLength))
 
-	if pkg.FileExists(meta.FileName) {
+	if util.FileExists(meta.FileName) {
 		// FIX: Also check the File size, just to be sure that it wasn't an incomplete download.
 		fmt.Println("File already exists, skipping download")
 		return
 	}
 
 	// Using a temp folder in current dir to manage use artifacts of download.
-	tempFileDir := internals.TempDirectory(sessionID)
-	if pkg.FileExists(tempFileDir) {
+	tempFileDir := util.TempDirectory(sessionID)
+	if util.FileExists(tempFileDir) {
 		fmt.Println("Resuming download..")
 	} else {
-		pkg.CreateDir(internals.TempDirectory(sessionID), ".")
+		util.CreateDir(util.TempDirectory(sessionID), ".")
 	}
 
 	isDownloadComplete := downloadAndMerge(flags, meta, sessionID)
@@ -71,10 +70,10 @@ func manageDownloadFlow(flags *CLIFlags, meta *network.FileMeta, sessionID strin
 	if isDownloadComplete {
 		// Perform file integrity check
 		if flags.Checksum != "" {
-			res := pkg.FileIntegrityCheck("sha256", meta.FileName, flags.Checksum)
+			res := util.FileIntegrityCheck("sha256", meta.FileName, flags.Checksum)
 			fmt.Println("File integrity: ", res)
 		}
-		pkg.DeleteFile(internals.TempDirectory(sessionID))
+		util.DeleteFile(util.TempDirectory(sessionID))
 	}
 }
 

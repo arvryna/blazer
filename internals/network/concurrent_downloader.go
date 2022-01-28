@@ -7,8 +7,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/arvyshka/blazer/internals"
-	pkg "github.com/arvyshka/blazer/pkg/data"
+	"github.com/arvryna/blazer/internals/chunk"
+	"github.com/arvryna/blazer/internals/util"
 )
 
 func acceptedStatusCodes(code int) bool {
@@ -21,15 +21,15 @@ func acceptedStatusCodes(code int) bool {
 
 // ConcurrentDownloader: Concurrently download the resource with specified concurrency value.
 // it returns download status as bool
-func ConcurrentDownloader(meta *FileMeta, thread int, sessionID string) (*internals.Chunks, bool) {
+func ConcurrentDownloader(meta *FileMeta, thread int, sessionID string) (*chunk.Chunks, bool) {
 	isDownloadComplete := true
-	chunks := internals.Chunks{Count: thread, TotalSize: int(meta.ContentLength)}
+	chunks := chunk.Chunks{Count: thread, TotalSize: int(meta.ContentLength)}
 	chunks.ComputeChunks()
 	var wg sync.WaitGroup
 	for i, segment := range chunks.Segments {
 
 		// if segment exist skip current segment download.
-		if pkg.FileExists(internals.SegmentFilePath(sessionID, i)) {
+		if util.FileExists(util.SegmentFilePath(sessionID, i)) {
 			// fmt.Println("Segment Id: ", i, "already downloaded").
 			continue
 		}
@@ -58,7 +58,7 @@ func ConcurrentDownloader(meta *FileMeta, thread int, sessionID string) (*intern
 }
 
 // DownloadSegment: download a specific piece of the bytes of the file that we want to download.
-func DownloadSegment(request *http.Request, segmentID int, r internals.Range, sessionID string) error {
+func DownloadSegment(request *http.Request, segmentID int, r chunk.Range, sessionID string) error {
 	request.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", r.Start, r.End))
 	resp, err := HTTPClient().Do(request)
 	if err != nil {
@@ -77,7 +77,7 @@ func DownloadSegment(request *http.Request, segmentID int, r internals.Range, se
 		return err
 	}
 
-	err = ioutil.WriteFile(internals.SegmentFilePath(sessionID, segmentID), bytes, os.ModePerm)
+	err = ioutil.WriteFile(util.SegmentFilePath(sessionID, segmentID), bytes, os.ModePerm)
 	if err != nil {
 		return err
 	}
