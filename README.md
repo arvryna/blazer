@@ -15,7 +15,7 @@
 
 ## Install
 3 different ways:
-- go get ``` go get -u github.com/arvryna/blazer ```
+- ``` go get -u github.com/arvryna/blazer ```
 - Download specific version from releases: https://github.com/arvryna/blazer/releases
 - Build from source: 
 ```
