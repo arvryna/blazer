@@ -13,6 +13,16 @@
 - Resume from interruption
 - File integrity check - SHA256
 
+## Install
+3 different ways:
+- go get ``` go get -u github.com/arvryna/blazer ```
+- Download specific version from releases: https://github.com/arvryna/blazer/releases
+- Build from source: 
+```
+git clone git@github.com:arvryna/blazer.git
+make package
+```
+
 ## Usage
 ``` blazer -url=example.com/1.mp4 -t=10  ```
 
@@ -40,19 +50,6 @@ Usage of blazer:
 
 ## Demo
 [![asciicast](https://asciinema.org/a/DInboSaUY2Ik9JIOcY4vZHRY9.svg)](https://asciinema.org/a/DInboSaUY2Ik9JIOcY4vZHRY9)
-
-## Install
-
-- Download existing binary(64 bit) from releases: https://github.com/arvryna/blazer/releases
-
-or
-
-- Build from source: 
-
-```
-git clone git@github.com:arvryna/blazer.git
-make package
-```
 
 # FAQ
 
