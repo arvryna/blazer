@@ -42,7 +42,7 @@ func (f *CLIFlags) Parse() error {
 
 func (f *CLIFlags) HasValidDownloadURL() (bool, error) {
 	if !network.IsValidURL(f.URL) {
-		return false, errors.New("invalid URL, a valid URL is mandatory")
+		return false, errors.New("Invalid URL, a valid URL is mandatory, pass URL using -url flag")
 	}
 	return true, nil
 }
@@ -56,5 +56,6 @@ func (f *CLIFlags) PerformEssentialChecks() {
 	ok, err := f.HasValidDownloadURL()
 	if !ok {
 		fmt.Println(err)
+		os.Exit(1)
 	}
 }

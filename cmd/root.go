@@ -24,5 +24,5 @@ func Execute() {
 		Flags: flags,
 	}
 
-	d.Run(flags)
+	d.Run()
 }

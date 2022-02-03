@@ -9,34 +9,33 @@ import (
 	"github.com/arvryna/blazer/internals/util"
 )
 
-const optimized_Download_Unsupported = "Optimized downloading not supported by server!"
+const optimized_Download_Unsupported = "Optimized downloading not supported by server!, File will be downloaded with a single thread"
 
 type Downloader struct {
 	Flags cflags.CLIFlags
 }
 
-func (d *Downloader) Run(flags cflags.CLIFlags) {
+func (d *Downloader) Run() {
 	fmt.Println("Fetching file meta..")
+
 	meta := network.FileMeta{}
-	err := meta.Fetch(flags.URL)
+	err := meta.Fetch(d.Flags.URL)
 	if err != nil {
 		fmt.Println("Can't initiate download", err)
 		return
 	}
 
 	if d.doesServerSupportRangeHeader(&meta) {
-		flags.Thread = 1
+		d.Flags.Thread = 1
 		fmt.Println(optimized_Download_Unsupported)
 	}
 
 	// Generate session ID for current download
-	sessionID := util.GenHash(flags.URL, flags.Thread)
-	d.manageDownloadFlow(&flags, &meta, sessionID)
+	sessionID := util.GenHash(d.Flags.URL, d.Flags.Thread)
+	d.manageDownloadFlow(&meta, sessionID)
 }
 
-func (d *Downloader) manageDownloadFlow(flags *cflags.CLIFlags, meta *network.FileMeta, sessionID string) {
-
-	// Logging important info to user
+func (d *Downloader) manageDownloadFlow(meta *network.FileMeta, sessionID string) {
 	fmt.Println("File size: " + util.GetFormattedSize(meta.ContentLength))
 
 	if util.FileExists(meta.FileName) {
@@ -53,21 +52,20 @@ func (d *Downloader) manageDownloadFlow(flags *cflags.CLIFlags, meta *network.Fi
 		util.CreateDir(util.TempDirectory(sessionID), ".")
 	}
 
-	isDownloadComplete := d.downloadAndMerge(flags, meta, sessionID)
+	isDownloadComplete := d.downloadAndMerge(meta, sessionID)
 
 	if isDownloadComplete {
-		// Perform file integrity check
-		if flags.Checksum != "" {
-			res := util.FileIntegrityCheck("sha256", meta.FileName, flags.Checksum)
+		if d.Flags.Checksum != "" {
+			res := util.FileIntegrityCheck("sha256", meta.FileName, d.Flags.Checksum)
 			fmt.Println("File integrity: ", res)
 		}
 		util.DeleteFile(util.TempDirectory(sessionID))
 	}
 }
 
-func (d *Downloader) downloadAndMerge(flags *cflags.CLIFlags, meta *network.FileMeta, sessionID string) bool {
-	fmt.Println("Download the file in threads: ", flags.Thread)
-	outputPath := flags.OutputPath
+func (d *Downloader) downloadAndMerge(meta *network.FileMeta, sessionID string) bool {
+	fmt.Println("Download the file in threads: ", d.Flags.Thread)
+	outputPath := d.Flags.OutputPath
 	if outputPath == "" {
 		outputPath = meta.FileName
 	}
@@ -75,7 +73,7 @@ func (d *Downloader) downloadAndMerge(flags *cflags.CLIFlags, meta *network.File
 	fmt.Println("Outputfile name: " + outputPath)
 
 	start := time.Now()
-	chunks, isDownloadComplete := network.ConcurrentDownloader(meta, flags.Thread, sessionID)
+	chunks, isDownloadComplete := network.ConcurrentDownloader(meta, d.Flags.Thread, sessionID)
 
 	if isDownloadComplete {
 		fmt.Println("Download finished in: ", time.Since(start))

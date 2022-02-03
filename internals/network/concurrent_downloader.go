@@ -30,7 +30,6 @@ func ConcurrentDownloader(meta *FileMeta, thread int, sessionID string) (*chunk.
 
 		// if segment exist skip current segment download.
 		if util.FileExists(util.SegmentFilePath(sessionID, i)) {
-			// fmt.Println("Segment Id: ", i, "already downloaded").
 			continue
 		}
 		request, err := BuildRequest(http.MethodGet, meta.FileURL)
