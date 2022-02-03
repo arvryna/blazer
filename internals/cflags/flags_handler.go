@@ -18,8 +18,10 @@ type CLIFlags struct {
 	Version    bool
 }
 
-// Default number of threads used for download if user don't specify thread count.
-const DefaultThreadCount = 10
+const (
+	DefaultThreadCount = 10
+	version            = "0.4-beta"
+)
 
 func (f *CLIFlags) Parse() error {
 	ver := flag.Bool("v", false, "Prints current version of blazer")
@@ -47,7 +49,7 @@ func (f *CLIFlags) HasValidDownloadURL() (bool, error) {
 
 func (f *CLIFlags) PerformEssentialChecks() {
 	if f.Version {
-		fmt.Println("Blazer version: ", f.Version)
+		fmt.Println("Blazer version: ", version)
 		os.Exit(0)
 	}
 

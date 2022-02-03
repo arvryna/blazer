@@ -12,10 +12,10 @@ import (
 const optimized_Download_Unsupported = "Optimized downloading not supported by server!"
 
 type Downloader struct {
-	flags cflags.CLIFlags
+	Flags cflags.CLIFlags
 }
 
-func Run(flags cflags.CLIFlags) {
+func (d *Downloader) Run(flags cflags.CLIFlags) {
 	fmt.Println("Fetching file meta..")
 	meta := network.FileMeta{}
 	err := meta.Fetch(flags.URL)
@@ -24,17 +24,17 @@ func Run(flags cflags.CLIFlags) {
 		return
 	}
 
-	if doesServerSupportRangeHeader(&meta) {
+	if d.doesServerSupportRangeHeader(&meta) {
 		flags.Thread = 1
 		fmt.Println(optimized_Download_Unsupported)
 	}
 
 	// Generate session ID for current download
 	sessionID := util.GenHash(flags.URL, flags.Thread)
-	manageDownloadFlow(&flags, &meta, sessionID)
+	d.manageDownloadFlow(&flags, &meta, sessionID)
 }
 
-func manageDownloadFlow(flags *cflags.CLIFlags, meta *network.FileMeta, sessionID string) {
+func (d *Downloader) manageDownloadFlow(flags *cflags.CLIFlags, meta *network.FileMeta, sessionID string) {
 
 	// Logging important info to user
 	fmt.Println("File size: " + util.GetFormattedSize(meta.ContentLength))
@@ -53,7 +53,7 @@ func manageDownloadFlow(flags *cflags.CLIFlags, meta *network.FileMeta, sessionI
 		util.CreateDir(util.TempDirectory(sessionID), ".")
 	}
 
-	isDownloadComplete := downloadAndMerge(flags, meta, sessionID)
+	isDownloadComplete := d.downloadAndMerge(flags, meta, sessionID)
 
 	if isDownloadComplete {
 		// Perform file integrity check
@@ -65,7 +65,7 @@ func manageDownloadFlow(flags *cflags.CLIFlags, meta *network.FileMeta, sessionI
 	}
 }
 
-func downloadAndMerge(flags *cflags.CLIFlags, meta *network.FileMeta, sessionID string) bool {
+func (d *Downloader) downloadAndMerge(flags *cflags.CLIFlags, meta *network.FileMeta, sessionID string) bool {
 	fmt.Println("Download the file in threads: ", flags.Thread)
 	outputPath := flags.OutputPath
 	if outputPath == "" {
@@ -91,6 +91,6 @@ func downloadAndMerge(flags *cflags.CLIFlags, meta *network.FileMeta, sessionID 
 	return isDownloadComplete
 }
 
-func doesServerSupportRangeHeader(meta *network.FileMeta) bool {
+func (d *Downloader) doesServerSupportRangeHeader(meta *network.FileMeta) bool {
 	return meta.AcceptRanges != "bytes"
 }

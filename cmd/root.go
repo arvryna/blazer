@@ -7,21 +7,10 @@ import (
 	"github.com/arvryna/blazer/internals/downloader"
 )
 
-/*
-	This file handles unpacking essential configs, parsing flags
-	and initiating the necessary download
-*/
-
-const (
-	version = "0.4-beta"
-)
-
-var (
-	flags cflags.CLIFlags
-)
+// This file parses the CLI flags and initiates download and initiating the necessary download
 
 func Execute() {
-	flags = cflags.CLIFlags{}
+	flags := cflags.CLIFlags{}
 
 	err := flags.Parse()
 	if err != nil {
@@ -30,5 +19,10 @@ func Execute() {
 	}
 
 	flags.PerformEssentialChecks()
-	downloader.Run(flags)
+
+	d := downloader.Downloader{
+		Flags: flags,
+	}
+
+	d.Run(flags)
 }
