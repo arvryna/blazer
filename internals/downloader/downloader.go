@@ -1,36 +1,24 @@
-package cmd
+package downloader
 
 import (
 	"fmt"
 	"time"
 
+	"github.com/arvryna/blazer/internals/cflags"
 	"github.com/arvryna/blazer/internals/network"
 	"github.com/arvryna/blazer/internals/util"
 )
 
-// Constant to track the current version of CLI.
-const Version = "0.4-beta"
-const (
-	Optimized_Download_Unsupported = "Optimized downloading not supported by server!"
-)
+const optimized_Download_Unsupported = "Optimized downloading not supported by server!"
 
-func Start() {
-	flags := CLIFlags{}
-	err := flags.Parse()
-	if err != nil {
-		fmt.Println("Error parsing flags: ", err)
-		return
-	}
+type Downloader struct {
+	flags cflags.CLIFlags
+}
 
-	// If the user only want to check version, show version info and exit
-	if flags.Version {
-		fmt.Println("Blazer version: ", Version)
-		return
-	}
-
+func Run(flags cflags.CLIFlags) {
 	fmt.Println("Fetching file meta..")
 	meta := network.FileMeta{}
-	err = meta.Fetch(flags.URL)
+	err := meta.Fetch(flags.URL)
 	if err != nil {
 		fmt.Println("Can't initiate download", err)
 		return
@@ -38,7 +26,7 @@ func Start() {
 
 	if doesServerSupportRangeHeader(&meta) {
 		flags.Thread = 1
-		fmt.Println(Optimized_Download_Unsupported)
+		fmt.Println(optimized_Download_Unsupported)
 	}
 
 	// Generate session ID for current download
@@ -46,7 +34,7 @@ func Start() {
 	manageDownloadFlow(&flags, &meta, sessionID)
 }
 
-func manageDownloadFlow(flags *CLIFlags, meta *network.FileMeta, sessionID string) {
+func manageDownloadFlow(flags *cflags.CLIFlags, meta *network.FileMeta, sessionID string) {
 
 	// Logging important info to user
 	fmt.Println("File size: " + util.GetFormattedSize(meta.ContentLength))
@@ -77,7 +65,7 @@ func manageDownloadFlow(flags *CLIFlags, meta *network.FileMeta, sessionID strin
 	}
 }
 
-func downloadAndMerge(flags *CLIFlags, meta *network.FileMeta, sessionID string) bool {
+func downloadAndMerge(flags *cflags.CLIFlags, meta *network.FileMeta, sessionID string) bool {
 	fmt.Println("Download the file in threads: ", flags.Thread)
 	outputPath := flags.OutputPath
 	if outputPath == "" {

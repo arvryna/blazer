@@ -1,7 +1,5 @@
 package util
 
-// File for storing global constants and functions
-
 import (
 	"crypto/sha256"
 	"encoding/hex"
@@ -12,6 +10,11 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+)
+
+const (
+	MemUnit         = 1024
+	SHA256Algorithm = "sha256"
 )
 
 // Create a directory with session ID, Session ID is hash of URL and threadcount.
@@ -51,8 +54,6 @@ func CreateDir(folderName string, dirPath string) {
 	}
 }
 
-const MemUnit = 1024
-
 func genChecksumSha256(path string) string {
 	f, err := os.Open(path)
 	if err != nil {
@@ -68,7 +69,7 @@ func genChecksumSha256(path string) string {
 }
 
 func FileIntegrityCheck(hashFunc string, path string, expected string) bool {
-	if strings.ToLower(hashFunc) == "sha256" {
+	if strings.ToLower(hashFunc) == SHA256Algorithm {
 		return (expected == genChecksumSha256(path))
 	}
 	fmt.Println(hashFunc, ": not implemented yet")

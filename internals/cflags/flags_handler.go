@@ -1,8 +1,10 @@
-package cmd
+package cflags
 
 import (
 	"errors"
 	"flag"
+	"fmt"
+	"os"
 
 	"github.com/arvryna/blazer/internals/network"
 )
@@ -25,16 +27,7 @@ func (f *CLIFlags) Parse() error {
 	out := flag.String("out", "", "Output path to store the downloaded file")
 	t := flag.Int("t", DefaultThreadCount, "Thread count - Number of concurrent downloads")
 	checksum := flag.String("checksum", "", "Checksum SHA256(currently supported) to verify file")
-
 	flag.Parse()
-
-	if *urlString == "" {
-		return errors.New("url is mandatory")
-	}
-
-	if !network.IsValidURL(*urlString) {
-		return errors.New("invalid URL")
-	}
 
 	f.Version = *ver
 	f.URL = *urlString
@@ -43,4 +36,23 @@ func (f *CLIFlags) Parse() error {
 	f.Checksum = *checksum
 
 	return nil
+}
+
+func (f *CLIFlags) HasValidDownloadURL() (bool, error) {
+	if !network.IsValidURL(f.URL) {
+		return false, errors.New("invalid URL, a valid URL is mandatory")
+	}
+	return true, nil
+}
+
+func (f *CLIFlags) PerformEssentialChecks() {
+	if f.Version {
+		fmt.Println("Blazer version: ", f.Version)
+		os.Exit(0)
+	}
+
+	ok, err := f.HasValidDownloadURL()
+	if !ok {
+		fmt.Println(err)
+	}
 }
