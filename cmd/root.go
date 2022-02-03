@@ -5,6 +5,7 @@ import (
 
 	"github.com/arvryna/blazer/internals/cflags"
 	"github.com/arvryna/blazer/internals/downloader"
+	"github.com/arvryna/blazer/internals/util"
 )
 
 // This file parses the CLI flags and initiates download and initiating the necessary download
@@ -20,8 +21,11 @@ func Execute() {
 
 	flags.PerformEssentialChecks()
 
+	sessionID := util.GenHash(flags.URL, flags.Thread)
+
 	d := downloader.Downloader{
-		Flags: flags,
+		Flags:     flags,
+		SessionID: sessionID,
 	}
 
 	d.Run()

@@ -60,7 +60,7 @@ func (d *Dispatcher) InitiateConcurrentDispatch() (*chunk.Chunks, bool) {
 	return &chunks, isDownloadComplete
 }
 
-// DownloadSegment: download a specific piece of the bytes of the file that we want to download.
+// DownloadSegment: download a specific piece of the file
 func (d *Dispatcher) downloadSegment(request *http.Request, segmentID int, r chunk.Range) error {
 	request.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", r.Start, r.End))
 	resp, err := HTTPClient().Do(request)
