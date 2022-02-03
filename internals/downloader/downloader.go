@@ -73,7 +73,14 @@ func (d *Downloader) downloadAndMerge(meta *network.FileMeta, sessionID string) 
 	fmt.Println("Outputfile name: " + outputPath)
 
 	start := time.Now()
-	chunks, isDownloadComplete := network.ConcurrentDownloader(meta, d.Flags.Thread, sessionID)
+
+	dispatcher := network.Dispatcher{
+		Meta:        meta,
+		ThreadCount: d.Flags.Thread,
+		SessionID:   sessionID,
+	}
+
+	chunks, isDownloadComplete := dispatcher.InitiateConcurrentDispatch()
 
 	if isDownloadComplete {
 		fmt.Println("Download finished in: ", time.Since(start))
