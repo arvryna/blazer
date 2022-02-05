@@ -10,7 +10,7 @@ import (
 	"github.com/arvryna/blazer/internals/util"
 )
 
-const optimized_Download_Unsupported = "Optimized downloading not supported by server!, File will be downloaded with a single thread"
+const optimizedDownloadUnsupported = "Optimized downloading not supported by server!, File will be downloaded with a single thread"
 
 type Downloader struct {
 	SessionID string
@@ -55,7 +55,7 @@ func (d *Downloader) performEssentialChecks(meta *network.FileMeta) {
 	// Not all servers can allow multi-threaded file download, fallback to single threaded download when necessary
 	if d.doesServerSupportRangeHeader(meta) {
 		d.Flags.Thread = 1
-		fmt.Println(optimized_Download_Unsupported)
+		fmt.Println(optimizedDownloadUnsupported)
 	}
 }
 
