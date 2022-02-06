@@ -22,7 +22,7 @@ Chunks: The file that we want to download will be split into multiple pieces rep
 
  segments: [[0,n1],[n1+1,n1+chunkSize]....[,n]]
 */
-type Chunks struct {
+type ChunkList struct {
 	Size      int
 	TotalSize int
 	Segments  []Range
@@ -30,7 +30,7 @@ type Chunks struct {
 }
 
 // ComputeChunks: Compute chunks for a given parts(thread count).
-func (c *Chunks) ComputeChunks() {
+func (c *ChunkList) ComputeChunks() {
 	c.Size = int(float64(c.TotalSize) / float64(c.Count))
 	pos := -1
 	for i := 0; i < c.Count; i++ {
@@ -59,7 +59,7 @@ func (c *Chunks) ComputeChunks() {
 }
 
 // Merge all segments into a single file.
-func (c *Chunks) Merge(outputName string, sessionID string) error {
+func (c *ChunkList) Merge(outputName string, sessionID string) error {
 	f, err := os.OpenFile(outputName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, os.ModePerm)
 	if err != nil {
 		return err

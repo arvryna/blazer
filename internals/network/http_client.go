@@ -7,12 +7,6 @@ import (
 	"time"
 )
 
-// URL validation.
-func IsValidURL(str string) bool {
-	u, err := url.Parse(str)
-	return err == nil && u.Scheme != "" && u.Host != ""
-}
-
 // Build request object with custom header.
 func BuildRequest(method string, url string) (*http.Request, error) {
 	r, err := http.NewRequest(method, url, nil)
@@ -30,8 +24,13 @@ func HTTPClient() *http.Client {
 			Timeout:   60 * time.Second,
 			KeepAlive: 30 * time.Second,
 		}).Dial,
-		// We use ABSURDLY large keys, and should probably not.
 		TLSHandshakeTimeout: 600 * time.Second,
 	}
 	return &http.Client{Transport: t}
+}
+
+// URL validation.
+func IsValidURL(str string) bool {
+	u, err := url.Parse(str)
+	return err == nil && u.Scheme != "" && u.Host != ""
 }

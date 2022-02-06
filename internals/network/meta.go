@@ -13,7 +13,7 @@ type FileMeta struct {
 	ServerName    string
 	Age           int
 	ContentType   string
-	AcceptRanges string
+	AcceptRanges  string
 }
 
 // Fetch the meta details of a given URL.
@@ -32,7 +32,7 @@ func (m *FileMeta) Fetch(url string) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return fmt.Errorf("received un-expected status code: %v resp: %v", resp.StatusCode, resp)
+		return fmt.Errorf("Rreceived un-expected status code: %v resp: %v", resp.StatusCode, resp)
 	}
 
 	m.FileURL = url

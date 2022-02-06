@@ -19,10 +19,10 @@ type Dispatcher struct {
 
 // Concurrently download the resource with specified concurrency value.
 // it returns download status as bool
-func (d *Dispatcher) InitiateConcurrentDispatch() (*chunk.Chunks, bool) {
+func (d *Dispatcher) InitiateConcurrentDispatch() (*chunk.ChunkList, bool) {
 	isDownloadComplete := true
 
-	chunks := chunk.Chunks{Count: d.ThreadCount, TotalSize: int(d.Meta.ContentLength)}
+	chunks := chunk.ChunkList{Count: d.ThreadCount, TotalSize: int(d.Meta.ContentLength)}
 	chunks.ComputeChunks()
 
 	var wg sync.WaitGroup
