@@ -20,7 +20,7 @@ type CLIFlags struct {
 
 const (
 	DefaultThreadCount = 10
-	version            = "0.4-beta"
+	version            = "0.5-beta"
 )
 
 func (f *CLIFlags) Parse() error {

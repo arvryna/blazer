@@ -87,7 +87,7 @@ func (c *ChunkList) Merge(outputName string, sessionID string) error {
 	if bytesMerged == c.TotalSize {
 		fmt.Println("File downloaded successfully..")
 	} else {
-		return errors.New("file download is incomplete, retry")
+		return errors.New("File download is incomplete, retry")
 	}
 	return nil
 }

@@ -15,6 +15,7 @@ import (
 const (
 	MemUnit         = 1024
 	SHA256Algorithm = "sha256"
+	MD5Algorithm    = "md5"
 )
 
 // Create a directory with session ID, Session ID is hash of URL and threadcount.
@@ -31,13 +32,11 @@ func SegmentFilePath(session string, fileID int) string {
 	return fmt.Sprintf("%v/s-%v", TempDirectory(session), fileID)
 }
 
-// Check if file exist.
 func FileExists(name string) bool {
 	_, err := os.Stat(name)
 	return !os.IsNotExist(err)
 }
 
-// Delete file/folder.
 func DeleteFile(name string) {
 	err := os.RemoveAll(name)
 	if err != nil {

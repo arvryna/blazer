@@ -75,7 +75,7 @@ func (d *Downloader) downloadAndMerge(meta *network.FileMeta) bool {
 		outputPath = meta.FileName
 	}
 
-	fmt.Println("Outputfile name: " + outputPath)
+	fmt.Println("Output filename: " + outputPath)
 
 	start := time.Now()
 

@@ -8,7 +8,7 @@ import (
 	"github.com/arvryna/blazer/internals/util"
 )
 
-// This file parses the CLI flags and initiates download and initiating the necessary download
+// This file parses the CLI flags and initiates download
 
 func Execute() {
 	flags := cflags.CLIFlags{}
