@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/arvryna/blazer/internals/network"
+	"github.com/arvryna/blazer/internal/network"
 )
 
 type CLIFlags struct {

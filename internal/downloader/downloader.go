@@ -5,9 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/arvryna/blazer/internals/cflags"
-	"github.com/arvryna/blazer/internals/network"
-	"github.com/arvryna/blazer/internals/util"
+	"github.com/arvryna/blazer/internal/cflags"
+	"github.com/arvryna/blazer/internal/network"
+	"github.com/arvryna/blazer/internal/util"
 )
 
 const optimizedDownloadUnsupported = "Optimized downloading not supported by server!, File will be downloaded with a single thread"

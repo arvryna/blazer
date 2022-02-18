@@ -7,8 +7,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/arvryna/blazer/internals/chunk"
-	"github.com/arvryna/blazer/internals/util"
+	"github.com/arvryna/blazer/internal/chunk"
+	"github.com/arvryna/blazer/internal/util"
 )
 
 type Dispatcher struct {

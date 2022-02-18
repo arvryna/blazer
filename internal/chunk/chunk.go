@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/arvryna/blazer/internals/util"
+	"github.com/arvryna/blazer/internal/util"
 )
 
 // Range represents the interval of the segment.
