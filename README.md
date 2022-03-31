@@ -1,5 +1,3 @@
-# Blazer - Concurrent file downloader
-
 <p align="left">
   <a href="https://goreportcard.com/report/github.com/arvryna/blazer">
     <img src="https://goreportcard.com/badge/github.com/arvryna/blazer" />
@@ -9,6 +7,11 @@
   </a>
 </p>
 
+# Blazer - Concurrent file downloader
+
+A CLI tool to download files from anywhere concurrently using the power of go-routines written using stdlib without any dependencies.
+
+## Features
 - Control thread count
 - Resume from interruption
 - File integrity check - SHA256
@@ -56,7 +59,7 @@ Usage of blazer:
 
 # FAQ
 
-## How blazer works
+## How blazer works ?
 Blazer makes use of [RFC7233](https://datatracker.ietf.org/doc/html/rfc7233) to identify the size of the resource to download, and then initiates partial downloads concurrently with the help of multiple go-routines, once all segements are downloaded, we finally merge all the individual segments into the final file. Number of segments = thread count passed as param to blazer CLI
 
 ## How file resumption work ?
